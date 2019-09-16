@@ -43,7 +43,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="algorithm\CombinedInstanceHandler.cs" />
+    <Compile Include="algorithm\CombinedSolutionHandler.cs" />
     <Compile Include="algorithm\Solver.cs" />
+    <Compile Include="algorithm\TrimedInstanceHandler.cs" />
+    <Compile Include="algorithm\TrimedSolutionHandler.cs" />
+    <Compile Include="model\CInstance.cs" />
+    <Compile Include="model\CSolution.cs" />
+    <Compile Include="model\CTInstance.cs" />
+    <Compile Include="model\CTSolution.cs" />
     <Compile Include="model\Field.cs" />
     <Compile Include="model\Instance.cs" />
     <Compile Include="model\Solution.cs" />
