@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="algorithm\CombinedInstanceHandler.cs" />
     <Compile Include="algorithm\CombinedSolutionHandler.cs" />
+    <Compile Include="algorithm\RandomSolver.cs" />
     <Compile Include="algorithm\Solver.cs" />
     <Compile Include="algorithm\TrimedInstanceHandler.cs" />
     <Compile Include="algorithm\TrimedSolutionHandler.cs" />
