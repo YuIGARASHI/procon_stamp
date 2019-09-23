@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 namespace procon_stamp.model {
     class Instance {
 
-        private List<Tuple<int, int, int>> origin_stamp_object_list;
-        private List<Tuple<int, int, int>> combined_stamp_object_list;
+        private List<Stamp> origin_stamp_object_list;
+        private List<Stamp> combined_stamp_object_list;
 
         /// <summary>
         /// 引数のStampクラスのオブジェクトをstamp_object_listにセットする。
         /// </summary>
         /// <param name="stamp_object">スタンプクラスのオブジェクト</param>
-        public void SetOriginStampObject(List<Tuple<int, int, int>> stamp_object)
+        public void SetOriginStampObject(List<Stamp> stamp_object)
         {
-            this.origin_stamp_object_list = new List<Tuple<int, int, int>>(stamp_object);
+            this.origin_stamp_object_list = stamp_object;
         }
 
         /// <summary>
@@ -24,16 +24,12 @@ namespace procon_stamp.model {
         /// </summary>
         public void MakeCombinedStampList()
         {
-            this.combined_stamp_object_list = new List<Tuple<int, int, int>>(this.origin_stamp_object_list);
+            // ひとまずoriginal stamp listをそのまま使う
+            // NOTE: deepcopyしていないが大丈夫か...？
+            this.combined_stamp_object_list = this.origin_stamp_object_list;
         }
 
-
-        /// <summary>
-        /// 
-        /// 
-        /// </summary>
-        /// <returns>combined stamp</returns>
-        public List<Tuple<int, int, int>> GetCombinedStampObjectList()
+        public List<Stamp> GetCombinedStampObjectList()
         {
             return this.combined_stamp_object_list;
         }

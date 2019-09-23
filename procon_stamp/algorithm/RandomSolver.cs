@@ -9,6 +9,7 @@ namespace procon_stamp.algorithm
 {
     class RandomSolver : Solver
     {
+        override
         public Solution CalcSolution(Instance instance)
         {
             // 暫定解
@@ -29,15 +30,13 @@ namespace procon_stamp.algorithm
                 Field temp_field = result.Item2;
                 
                 // 目的関数値が改善すれば解に追加
-                if ( temp_solution.NumOfMatchesWithTargetField() > best_objective_value )
+                if ( temp_field.NumOfMatchesWithTargetField() > best_objective_value )
                 {
                     current_best_solution = temp_solution;
                     best_objective_value = temp_field.NumOfMatchesWithTargetField();
-                }
-
-                return current_best_solution;
+                }                
             }
-
+            return current_best_solution;
         }
 
         private static Tuple<Solution, Field> MakeCandidateSolution(Instance instance)
@@ -54,11 +53,12 @@ namespace procon_stamp.algorithm
                 // TODO: メンバ変数を直接参照している。アクセサを経由するように改修すべき。
                 int parallel_translation_x = rand.Next(Field.field_x_size);
                 int parallel_translation_y = rand.Next(Field.field_y_size);
-                int stamp_object_idx = rand.Next(instance.combined_stamp_object_list.Count() - 1);
-                temp_solution.AddStampAnswer(instance.combined_stamp_object_list[stamp_object_idx],
+                var combined_stamp_object_list = instance.GetCombinedStampObjectList();
+                int stamp_object_idx = rand.Next(combined_stamp_object_list.Count() - 1);
+                temp_solution.AddStampAnswer(combined_stamp_object_list[stamp_object_idx],
                                              parallel_translation_x,
                                              parallel_translation_y);
-                temp_field.PressStamp(instance.combined_stamp_object_list[stamp_object_idx],
+                temp_field.PressStamp(combined_stamp_object_list[stamp_object_idx],
                                       parallel_translation_x,
                                       parallel_translation_y);
             }

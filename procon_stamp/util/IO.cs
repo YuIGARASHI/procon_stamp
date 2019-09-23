@@ -17,7 +17,7 @@ namespace procon_stamp.util {
         }
 
         // 標準入力から文字列を読み取り、Fieldインスタンス・Stampインスタンスを生成する
-        static void InputProblem()
+        public void InputProblem()
         {
             // ターゲットフィールドの読み取り
             Field.SetTargetField(Console.ReadLine());
@@ -34,26 +34,24 @@ namespace procon_stamp.util {
                 Stamp stamp_object  = new Stamp(count++, buf_str);
                 stamp_object_list.Add(stamp_object);
             }
-
-            return;
         }
 
         // 解の情報を受け取り標準出力に出力する
-        static void OutputSolution(Solution solution, int field_x_size, int field_y_size)
+        public void OutputSolution(Solution solution, int field_x_size, int field_y_size)
         {
             var answer_list = new List<Tuple<int, int, int>>();
-            foreach ( var pressing_info in solution.GetStampAnswerList )
+            foreach ( var pressing_info in solution.GetStampAnswerList() )
             {
-                Stamp combined_stamp = pressing_info[0];
-                int slide_x = pressing_info[1];
-                int slide_y = pressing_info[2];
+                Stamp combined_stamp = pressing_info.Item1;
+                int slide_x = pressing_info.Item2;
+                int slide_y = pressing_info.Item3;
 
                 // スタンプを構成するorigin stampを平行移動したのちanswer_listに追加
                 foreach ( var origin_stamp in combined_stamp.GetOriginStampList() )
                 {
-                    var after_stamp = new Tuple<int, int, int>(origin_stamp[0], 
-                                                               origin_stamp[1] + slide_x, 
-                                                               origin_stamp[2] + slide_y);
+                    var after_stamp = new Tuple<int, int, int>(origin_stamp.Item1, 
+                                                               origin_stamp.Item2 + slide_x, 
+                                                               origin_stamp.Item3 + slide_y);
                     // スタンプがフィールド外にある場合には解に追加しない
                     // NOTE: ここでは第4象限にある場合のみをチェック。それ以外はチェックしていない
                     if ( after_stamp.Item2 > field_x_size || after_stamp.Item3 > field_y_size )
@@ -81,8 +79,6 @@ namespace procon_stamp.util {
                 }
                 Console.Write( stamp_number + ";" + slide_x + "," + slide_y + end_line );
             }
-
-            return;
         }
     }
 }

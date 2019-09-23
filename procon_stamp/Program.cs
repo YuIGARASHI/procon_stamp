@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using procon_stamp.algorithm;
+using procon_stamp.model;
+using procon_stamp.util;
 
 namespace procon_stamp
 {
@@ -10,6 +13,8 @@ namespace procon_stamp
     {
         static void Main(string[] args)
         {
+            var io = new IO();
+            io.InputProblem();
         }
     }
 }
