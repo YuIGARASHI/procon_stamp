@@ -8,12 +8,11 @@ using procon_stamp.model;
 namespace procon_stamp.util {
     class IO {
         // Stampクラスのオブジェクトを格納するリスト
-        static List<Stamp> stamp_object_list;
+        List<Stamp> stamp_object_list;
 
-        // 静的コンストラクタ
-        static IO()
+        public List<Stamp> GetStampObjectList()
         {
-            stamp_object_list = new List<Stamp>();
+            return this.stamp_object_list;
         }
 
         // 標準入力から文字列を読み取り、Fieldインスタンス・Stampインスタンスを生成する
