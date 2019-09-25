@@ -7,10 +7,6 @@ using procon_stamp.model;
 
 namespace procon_stamp.model {
     class Field {
-
-        // お手本のフィールド情報を二次元配列で格納するリスト。
-        private static int[][] target_field;
-
         // お手本のフィールドのx,y軸方向サイズ。
         public static int field_x_size;
         public static int field_y_size;
@@ -36,6 +32,13 @@ namespace procon_stamp.model {
         // お手本情報を二次元配列で格納するリスト。
         public static List<List<int>> target_field;
 
+        static Field()
+        {
+            field_x_size = 0;
+            field_y_size = 0;
+            black_cell_list_of_target_field = new List<Tuple<int, int>>();
+        }
+
         /// <summary>
         /// 引数なしコンストラクタ
         /// </summary>
@@ -58,17 +61,17 @@ namespace procon_stamp.model {
         {
             string target_field_str;
             string[] target_field_information_for_split = target_field_information.Split(';');
-            this.field_x_size = int.Parse(target_field_information_for_split[0]);
-            this.field_y_size = int.Parse(target_field_information_for_split[1]);
+            field_x_size = int.Parse(target_field_information_for_split[0]);
+            field_y_size = int.Parse(target_field_information_for_split[1]);
             target_field_str = target_field_information_for_split[2];
              
             // target_fieldを作成する
             int current_position = 0;
-            for(int y = 0; y < this.field_y_size; y++)
+            for(int y = 0; y < field_y_size; y++)
             {
-                for(int x = 0; x < this.field_x_size; x++)
+                for(int x = 0; x < field_x_size; x++)
                 {
-                    this.target_field[y][x] = int.Parse(target_field_str[current_position]);
+                    target_field[y][x] = int.Parse(target_field_str[current_position].ToString());
                     current_position += 1;
                 }
             }
@@ -92,7 +95,7 @@ namespace procon_stamp.model {
                 {
                     for (int j = 0; j < field_x_size; j++)
                     {
-                        if(Field.target_field[i][j] == this.myField[i][j])
+                        if(Field.target_field[i][j] == this.my_field[i][j])
                         {
                             match_count += 1;
                         }
@@ -109,7 +112,7 @@ namespace procon_stamp.model {
         /// <returns></returns>
         public List<Tuple<int, int>> GetBlackCellCoordinateForTargetField()
         {
-            if (Field.black_cell_list_of_target_field)
+            if (black_cell_list_of_target_field.Count() == 0)
             {
                 return Field.black_cell_list_of_target_field;
             }
@@ -144,10 +147,13 @@ namespace procon_stamp.model {
 
             foreach(Tuple<int, int> press_tuple in press_black_cell_coordinate_list)
             {
-                candidate_press_x = press_tuple[1] + parallel_translation_x;
-                candidate_press_y = press_tuple[0] + parallel_translation_y;
+                candidate_press_x = press_tuple.Item1 + parallel_translation_x;
+                candidate_press_y = press_tuple.Item2 + parallel_translation_y;
             
-                if(candidate_press_x < 0 || candidate_press_y < 0 || candidate_press_x >= Field.field_x_size || candidate_press_y >= Field.field_y_size)
+                if( candidate_press_x < 0 || 
+                    candidate_press_y < 0 || 
+                    candidate_press_x >= Field.field_x_size || 
+                    candidate_press_y >= Field.field_y_size)
                 {
                     continue;
                 }

@@ -18,7 +18,6 @@ namespace procon_stamp.model {
         public void AddStampAnswer(Stamp stamp_object, int x, int y)
         {
             this.stamp_answer_list.Add(new Tuple<Stamp, int, int>(stamp_object, x, y));
-            return;
         }
 
         // 解を取得する
