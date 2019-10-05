@@ -7,28 +7,22 @@ using System.Threading.Tasks;
 namespace procon_stamp.model {
     class Stamp {
 
-        public int stamp_x_size
-        {
-            get;
-        }
-
         // スタンプのx、y軸方向サイズ。
-        // private int stamp_x_size;
+        private int stamp_x_size;
         private int stamp_y_size;
 
         // スタンプの絵の定義。
         private string definition_of_stamp_picture;
 
         // スタンプの黒いセルの座標を格納する配列。
-        private List<Tuple<int, int>> black_cell_coordinate_list;
+        private List<Tuple<int, int>> black_cell_coordinate_list = new List<Tuple<int, int>>();
 
         // スタンプを構成するオリジナルスタンプの情報を保持する3-tupeの配列。
         // 3-tupleのレイアウトは(index, x軸方向への平行移動距離, y軸方向の平行移動距離)。
-        private List<Tuple<int, int, int>> indices;
+        private List<Tuple<int, int, int>> indices = new List<Tuple<int, int, int>>();
 
         // スタンプのオブジェクトを格納するリスト
-        private List<Tuple<int, int, int>> origin_stamp_list;
-
+        private List<Tuple<int, int, int>> origin_stamp_list = new List<Tuple<int, int, int>>();
 
         /// <summary>
         /// 引数ありコンストラクタ
@@ -37,7 +31,6 @@ namespace procon_stamp.model {
         /// <param name="input_str">スタンプの定義（x軸方向サイズ；y 軸方向サイズ；絵の定義）</param>
         public Stamp(int idx, string input_str)
         {
-
             this.origin_stamp_list.Add(new Tuple<int, int, int>(idx, 0, 0));
             string[] input_stamp_information = input_str.Split(';');
             this.stamp_x_size = int.Parse(input_stamp_information[0]);

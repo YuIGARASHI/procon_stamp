@@ -10,6 +10,11 @@ namespace procon_stamp.util {
         // Stampクラスのオブジェクトを格納するリスト
         List<Stamp> stamp_object_list;
 
+        public IO()
+        {
+            this.stamp_object_list = new List<Stamp>();
+        }
+
         public List<Stamp> GetStampObjectList()
         {
             return this.stamp_object_list;
@@ -76,7 +81,7 @@ namespace procon_stamp.util {
                 {
                     end_line = "\n";
                 }
-                Console.Write( stamp_number + ";" + slide_x + "," + slide_y + end_line );
+                Console.WriteLine( stamp_number + ";" + slide_x + "," + slide_y + end_line );
             }
         }
     }

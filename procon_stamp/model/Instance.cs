@@ -10,6 +10,12 @@ namespace procon_stamp.model {
         private List<Stamp> origin_stamp_object_list;
         private List<Stamp> combined_stamp_object_list;
 
+        pubilc pubilc()
+        {
+            origin_stamp_object_list = new List<Stamp>();
+            combined_stamp_object_list = new List<Stamp>();
+        }
+
         /// <summary>
         /// 引数のStampクラスのオブジェクトをstamp_object_listにセットする。
         /// </summary>

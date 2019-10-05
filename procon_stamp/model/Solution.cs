@@ -21,7 +21,7 @@ namespace procon_stamp.model {
         }
 
         // 解を取得する
-        public List<Tuple<Stamp, int ,int>> GetStampAnswerList()
+        public List<Tuple<Stamp, int, int>> GetStampAnswerList()
         {
             return this.stamp_answer_list;
         }
