@@ -27,16 +27,21 @@ namespace procon_stamp.model {
         public static List<Tuple<int, int>> random_target_field;
     
         // 自分のフィールド情報を二次元配列で格納するリスト。
-        private List<List<int>> my_field;
+        private int[,] my_field;
 
         // お手本情報を二次元配列で格納するリスト。
-        public static List<List<int>> target_field;
+        public static int[,] target_field;
 
         static Field()
         {
             field_x_size = 0;
             field_y_size = 0;
             black_cell_list_of_target_field = new List<Tuple<int, int>>();
+            divide_list = new List<Tuple<int, int>>();
+            divide_value_list = new List<Tuple<int, int>>();
+            divide_total_value_list = new List<Tuple<int, int>>();
+            random_target_field = new List<Tuple<int, int>>();
+            target_field = new int[0, 0];
         }
 
         /// <summary>
@@ -44,11 +49,14 @@ namespace procon_stamp.model {
         /// </summary>
         public Field()
         {
-            for(int i = 0; i < Field.field_y_size; i++)
+            // my_fieldを初期化
+            this.my_field = new int[Field.field_y_size , Field.field_x_size];
+
+            for (int y = 0; y < Field.field_y_size; y++)
             {
-                for (int j = 0; j < Field.field_x_size; j++)
+                for (int x = 0; x < Field.field_x_size; x++)
                 {
-                    this.my_field[i][j] = 0;
+                    this.my_field[y, x] = 0;
                 }
             }
         }
@@ -64,14 +72,15 @@ namespace procon_stamp.model {
             field_x_size = int.Parse(target_field_information_for_split[0]);
             field_y_size = int.Parse(target_field_information_for_split[1]);
             target_field_str = target_field_information_for_split[2];
-             
+
             // target_fieldを作成する
+            Field.target_field = new int[Field.field_y_size, Field.field_x_size];
             int current_position = 0;
-            for(int y = 0; y < field_y_size; y++)
+            for (int y = 0; y < field_y_size; y++)
             {
-                for(int x = 0; x < field_x_size; x++)
+                for (int x = 0; x < field_x_size; x++)
                 {
-                    target_field[y][x] = int.Parse(target_field_str[current_position].ToString());
+                    Field.target_field[y, x] = int.Parse(target_field_str[current_position].ToString());
                     current_position += 1;
                 }
             }
@@ -84,25 +93,16 @@ namespace procon_stamp.model {
         public int NumOfMatchesWithTargetField()
         {
             int match_count = 0;
-            for (int i = 0; i < Field.field_y_size ; i++)
+            for (int y = 0; y < Field.field_y_size; y++)
             {
-                if (Field.target_field[i] == this.my_field[i])
+                for (int x = 0; x < Field.field_y_size; x++)
                 {
-                    match_count += Field.field_x_size;
-                    continue;
-                }
-                else
-                {
-                    for (int j = 0; j < field_x_size; j++)
+                    if (Field.target_field[y,x].Equals(this.my_field[y,x]))
                     {
-                        if(Field.target_field[i][j] == this.my_field[i][j])
-                        {
-                            match_count += 1;
-                        }
-
+                        match_count++;
                     }
                 }
-            }
+            }                
             return match_count;
         }
 
@@ -122,7 +122,7 @@ namespace procon_stamp.model {
                 {
                     for (int x = 0; x < Field.field_x_size; x++)
                     {
-                        if(Field.target_field[y][x] == 1)
+                        if(Field.target_field[y, x] == 1)
                         {
                             Field.black_cell_list_of_target_field.Add(new Tuple<int, int>(y, x));
                         }
@@ -132,7 +132,7 @@ namespace procon_stamp.model {
             }
             return Field.black_cell_list_of_target_field;
         }
-        
+
 
         /// <summary>
         /// my_fieldにスタンプを押す。
@@ -145,31 +145,31 @@ namespace procon_stamp.model {
 
             List<Tuple<int, int>> press_black_cell_coordinate_list = stamp_object.GetBlackCellCoordinate();
 
-            foreach(Tuple<int, int> press_tuple in press_black_cell_coordinate_list)
+            foreach (Tuple<int, int> press_tuple in press_black_cell_coordinate_list)
             {
-                candidate_press_x = press_tuple.Item1 + parallel_translation_x;
-                candidate_press_y = press_tuple.Item2 + parallel_translation_y;
-            
-                if( candidate_press_x < 0 || 
-                    candidate_press_y < 0 || 
-                    candidate_press_x >= Field.field_x_size || 
+                candidate_press_x = press_tuple.Item2 + parallel_translation_x;
+                candidate_press_y = press_tuple.Item1 + parallel_translation_y;
+
+                if (candidate_press_x < 0 ||
+                    candidate_press_y < 0 ||
+                    candidate_press_x >= Field.field_x_size ||
                     candidate_press_y >= Field.field_y_size)
                 {
                     continue;
                 }
 
-                if(this.my_field[candidate_press_y][candidate_press_x] == 0)
+                if (this.my_field[candidate_press_y, candidate_press_x] == 0)
                 {
-                    this.my_field[candidate_press_y][candidate_press_x] = 1;
+                    this.my_field[candidate_press_y, candidate_press_x] = 1;
                 }
-                else if (this.my_field[candidate_press_y][candidate_press_x] == 1)
+                else if (this.my_field[candidate_press_y, candidate_press_x] == 1)
                 {
-                    this.my_field[candidate_press_y][candidate_press_x] = 0;
+                    this.my_field[candidate_press_y, candidate_press_x] = 0;
                 }
                 else
                 {
                     Console.WriteLine("pass");
-                }
+                }                
             }
         }
     }

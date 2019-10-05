@@ -13,7 +13,7 @@ namespace procon_stamp.algorithm
         public Solution CalcSolution(Instance instance)
         {
             // 暫定解
-            Solution current_best_solution = null;
+            Solution current_best_solution = new Solution();
 
             // 暫定解の目的関数値
             int best_objective_value = 0;
@@ -22,13 +22,12 @@ namespace procon_stamp.algorithm
             var sw = new System.Diagnostics.Stopwatch();
             sw.Start();
 
-            while ( sw.ElapsedMilliseconds < 9500 )
+            while ( sw.ElapsedMilliseconds < 9000 )
             {
                 // ランダムなスタンプの配置を計算
                 Tuple<Solution, Field> result = RandomSolver.MakeCandidateSolution(instance);
                 Solution temp_solution = result.Item1;
                 Field temp_field = result.Item2;
-                
                 // 目的関数値が改善すれば解に追加
                 if ( temp_field.NumOfMatchesWithTargetField() > best_objective_value )
                 {
@@ -36,6 +35,7 @@ namespace procon_stamp.algorithm
                     best_objective_value = temp_field.NumOfMatchesWithTargetField();
                 }                
             }
+            
             return current_best_solution;
         }
 
@@ -61,8 +61,9 @@ namespace procon_stamp.algorithm
                 temp_field.PressStamp(combined_stamp_object_list[stamp_object_idx],
                                       parallel_translation_x,
                                       parallel_translation_y);
-            }
+                count++;
 
+            }
             return new Tuple<Solution, Field>(temp_solution, temp_field);
         }
     }

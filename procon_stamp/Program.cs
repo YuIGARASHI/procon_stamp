@@ -18,6 +18,8 @@ namespace procon_stamp
             io.InputProblem();
             var instance = new Instance();
             instance.SetOriginStampObject(io.GetStampObjectList());
+            instance.MakeCombinedStampList();
+
 
             // ソルバーの生成 & 解の計算
             Solver solver = new RandomSolver();
