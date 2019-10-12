@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace procon_stamp.model {
-    class Instance {
+namespace StampLib.model
+{
+    public class Instance
+    {
 
         private List<Stamp> origin_stamp_object_list;
         private List<Stamp> combined_stamp_object_list;
 
-        pubilc pubilc()
+        public Instance()
         {
             origin_stamp_object_list = new List<Stamp>();
             combined_stamp_object_list = new List<Stamp>();

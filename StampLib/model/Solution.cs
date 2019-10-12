@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace procon_stamp.model {
-    class Solution {
+namespace StampLib.model
+{
+    public class Solution
+    {
         // 解を表す3-tupleのリスト
         private List<Tuple<Stamp, int, int>> stamp_answer_list;
 

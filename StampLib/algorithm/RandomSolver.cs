@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using procon_stamp.model;
+using StampLib.model;
 
-namespace procon_stamp.algorithm
+namespace StampLib.algorithm
 {
-    class RandomSolver : Solver
+    public class RandomSolver : Solver
     {
         override
         public Solution CalcSolution(Instance instance)
@@ -22,20 +22,20 @@ namespace procon_stamp.algorithm
             var sw = new System.Diagnostics.Stopwatch();
             sw.Start();
 
-            while ( sw.ElapsedMilliseconds < 9000 )
+            while (sw.ElapsedMilliseconds < 9000)
             {
                 // ランダムなスタンプの配置を計算
                 Tuple<Solution, Field> result = RandomSolver.MakeCandidateSolution(instance);
                 Solution temp_solution = result.Item1;
                 Field temp_field = result.Item2;
                 // 目的関数値が改善すれば解に追加
-                if ( temp_field.NumOfMatchesWithTargetField() > best_objective_value )
+                if (temp_field.NumOfMatchesWithTargetField() > best_objective_value)
                 {
                     current_best_solution = temp_solution;
                     best_objective_value = temp_field.NumOfMatchesWithTargetField();
-                }                
+                }
             }
-            
+
             return current_best_solution;
         }
 

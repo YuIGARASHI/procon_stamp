@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace procon_stamp.model {
-    class Stamp {
-
+namespace StampLib.model
+{
+    public class Stamp
+    {
         // スタンプのx、y軸方向サイズ。
         private int stamp_x_size;
         private int stamp_y_size;
@@ -67,10 +68,9 @@ namespace procon_stamp.model {
         /// 
         /// </summary>
         /// <returns>スタンプクラスのオブジェクトリスト</returns>
-        public List<Tuple<int,int,int>> GetOriginStampList()
+        public List<Tuple<int, int, int>> GetOriginStampList()
         {
             return this.origin_stamp_list;
         }
-
     }
 }

@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2AA33373-7934-4A31-A2A4-5488BCE8A583}</ProjectGuid>
+    <ProjectGuid>{8AC6EE6E-5BBE-4C06-995C-402FA8202DEF}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>experimnt</RootNamespace>
-    <AssemblyName>experimnt</AssemblyName>
+    <RootNamespace>Submit</RootNamespace>
+    <AssemblyName>Submit</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="StampLib">
+      <HintPath>..\StampLib\bin\Debug\StampLib.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

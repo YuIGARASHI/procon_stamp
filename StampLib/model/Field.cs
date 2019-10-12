@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using procon_stamp.model;
 
-namespace procon_stamp.model {
-    class Field {
+namespace StampLib.model
+{
+    public class Field
+    {
         // お手本のフィールドのx,y軸方向サイズ。
         public static int field_x_size;
         public static int field_y_size;
@@ -16,16 +17,16 @@ namespace procon_stamp.model {
 
         // 分割したお手本のフィールド情報（座標）を格納するリスト。
         public static List<Tuple<int, int>> divide_list;
-        
+
         // 分割したお手本のフィールド情報（値[0,1]）を格納するリスト。
         public static List<Tuple<int, int>> divide_value_list;
-        
+
         // 分割したお手本のフィールドごとの合計した値[0,1]を格納するリスト。
         public static List<Tuple<int, int>> divide_total_value_list;
-      
+
         // ランダムの対象となる分割フィールドのインデックスを格納するリスト。 
         public static List<Tuple<int, int>> random_target_field;
-    
+
         // 自分のフィールド情報を二次元配列で格納するリスト。
         private int[,] my_field;
 
@@ -50,7 +51,7 @@ namespace procon_stamp.model {
         public Field()
         {
             // my_fieldを初期化
-            this.my_field = new int[Field.field_y_size , Field.field_x_size];
+            this.my_field = new int[Field.field_y_size, Field.field_x_size];
 
             for (int y = 0; y < Field.field_y_size; y++)
             {
@@ -97,12 +98,12 @@ namespace procon_stamp.model {
             {
                 for (int x = 0; x < Field.field_y_size; x++)
                 {
-                    if (Field.target_field[y,x].Equals(this.my_field[y,x]))
+                    if (Field.target_field[y, x].Equals(this.my_field[y, x]))
                     {
                         match_count++;
                     }
                 }
-            }                
+            }
             return match_count;
         }
 
@@ -118,17 +119,17 @@ namespace procon_stamp.model {
             }
             else
             {
-                for(int y = 0; y < Field.field_y_size; y++)
+                for (int y = 0; y < Field.field_y_size; y++)
                 {
                     for (int x = 0; x < Field.field_x_size; x++)
                     {
-                        if(Field.target_field[y, x] == 1)
+                        if (Field.target_field[y, x] == 1)
                         {
                             Field.black_cell_list_of_target_field.Add(new Tuple<int, int>(y, x));
                         }
                     }
                 }
-                
+
             }
             return Field.black_cell_list_of_target_field;
         }
@@ -169,7 +170,7 @@ namespace procon_stamp.model {
                 else
                 {
                     Console.WriteLine("pass");
-                }                
+                }
             }
         }
     }
