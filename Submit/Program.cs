@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using procon_stamp.algorithm;
-using procon_stamp.model;
-using procon_stamp.util;
+using StampLib.model;
+using StampLib.algorithm;
+using StampLib.util;
 
-namespace procon_stamp
+namespace Submit
 {
     class Program
     {
@@ -20,14 +20,12 @@ namespace procon_stamp
             instance.SetOriginStampObject(io.GetStampObjectList());
             instance.MakeCombinedStampList();
 
-
             // ソルバーの生成 & 解の計算
             Solver solver = new RandomSolver();
             var solution = solver.CalcSolution(instance);
 
             // 解の出力
-            io.OutputSolution(solution, Field.field_x_size, Field.field_y_size);
-            
+            io.OutputSolution(solution);
         }
     }
 }
