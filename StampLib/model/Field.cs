@@ -8,81 +8,63 @@ namespace StampLib.model
 {
     public class Field
     {
-        // お手本のフィールドのx,y軸方向サイズ。
-        public static int field_x_size;
-        public static int field_y_size;
+        // お手本のフィールドのx,y軸方向サイズ
+        public static short x_size;
+        public static short y_size;
 
-        // お手本の黒い箇所の座標を格納するリスト。
-        public static List<Tuple<int, int>> black_cell_list_of_target_field;
+        // お手本の黒いセルの座標を格納するリスト
+        public static List<Tuple<short, short>> black_cell_coordinates;
 
-        // 分割したお手本のフィールド情報（座標）を格納するリスト。
-        public static List<Tuple<int, int>> divide_list;
+        // お手本の白いセルの座標を格納するリスト
+        public static List<Tuple<short, short>> white_cell_coordinates;
 
-        // 分割したお手本のフィールド情報（値[0,1]）を格納するリスト。
-        public static List<Tuple<int, int>> divide_value_list;
-
-        // 分割したお手本のフィールドごとの合計した値[0,1]を格納するリスト。
-        public static List<Tuple<int, int>> divide_total_value_list;
-
-        // ランダムの対象となる分割フィールドのインデックスを格納するリスト。 
-        public static List<Tuple<int, int>> random_target_field;
-
-        // 自分のフィールド情報を二次元配列で格納するリスト。
-        private int[,] my_field;
-
-        // お手本情報を二次元配列で格納するリスト。
-        public static int[,] target_field;
+        // 自分のフィールド情報を二次元配列で格納するリスト
+        private bool[,] my_field;
 
         static Field()
         {
-            field_x_size = 0;
-            field_y_size = 0;
-            black_cell_list_of_target_field = new List<Tuple<int, int>>();
-            divide_list = new List<Tuple<int, int>>();
-            divide_value_list = new List<Tuple<int, int>>();
-            divide_total_value_list = new List<Tuple<int, int>>();
-            random_target_field = new List<Tuple<int, int>>();
-            target_field = new int[0, 0];
+            Field.x_size = 0;
+            Field.y_size = 0;
+            Field.black_cell_coordinates = new List<Tuple<short, short>>();
+            Field.white_cell_coordinates = new List<Tuple<short, short>>();
         }
 
-        /// <summary>
-        /// 引数なしコンストラクタ
-        /// </summary>
         public Field()
         {
-            // my_fieldを初期化
-            this.my_field = new int[Field.field_y_size, Field.field_x_size];
+            this.my_field = new bool[Field.y_size, Field.x_size];
 
-            for (int y = 0; y < Field.field_y_size; y++)
+            for (short y = 0; y < Field.y_size; y++)
             {
-                for (int x = 0; x < Field.field_x_size; x++)
+                for (short x = 0; x < Field.x_size; x++)
                 {
-                    this.my_field[y, x] = 0;
+                    this.my_field[y, x] = false;
                 }
             }
         }
 
         /// <summary>
-        /// クラス変数（target_field、field_x_size、field_y_size）をセットする
+        /// クラス変数（target_field、x_size、y_size）をセットする。
         /// </summary>
-        /// <param name="target_field_information">お手本情報</param>
-        public static void SetTargetField(string target_field_information)
+        /// <param name="target_field_info">お手本の情報を表す文字列</param>
+        public static void SetTargetField(string target_field_info)
         {
-            string target_field_str;
-            string[] target_field_information_for_split = target_field_information.Split(';');
-            field_x_size = int.Parse(target_field_information_for_split[0]);
-            field_y_size = int.Parse(target_field_information_for_split[1]);
-            target_field_str = target_field_information_for_split[2];
+            string[] target_field_info_array = target_field_info.Split(';');
+            Field.x_size = short.Parse(target_field_info_array[0]);
+            Field.y_size = short.Parse(target_field_info_array[1]);
 
-            // target_fieldを作成する
-            Field.target_field = new int[Field.field_y_size, Field.field_x_size];
-            int current_position = 0;
-            for (int y = 0; y < field_y_size; y++)
+            string black_cell_coordinates_str = target_field_info_array[2];
+            short ind = 0;
+            for (short y_ind = 0; y_ind < Field.y_size; ++y_ind )
             {
-                for (int x = 0; x < field_x_size; x++)
+                for (short x_ind = 0; x_ind < Field.x_size; ++x_ind )
                 {
-                    Field.target_field[y, x] = int.Parse(target_field_str[current_position].ToString());
-                    current_position += 1;
+                    if ( black_cell_coordinates_str[ind++] == '1' )
+                    {
+                        Field.black_cell_coordinates.Add(new Tuple<short, short>(y_ind, x_ind));
+                    } else
+                    {
+                        Field.white_cell_coordinates.Add(new Tuple<short, short>(y_ind, x_ind));
+                    }
                 }
             }
         }
@@ -91,86 +73,52 @@ namespace StampLib.model
         /// target_fieldとmy_fieldとの一致数を計算する。
         /// </summary>
         /// <returns>一致数</returns>
-        public int NumOfMatchesWithTargetField()
+        public short NumOfMatchesWithTargetField()
         {
-            int match_count = 0;
-            for (int y = 0; y < Field.field_y_size; y++)
+            short match_count = 0;
+
+            // 黒いセルの一致数をカウント
+            foreach (var cell in Field.black_cell_coordinates)
             {
-                for (int x = 0; x < Field.field_y_size; x++)
+                if ( this.my_field[cell.Item1, cell.Item2] )
                 {
-                    if (Field.target_field[y, x].Equals(this.my_field[y, x]))
-                    {
-                        match_count++;
-                    }
+                    match_count++;
+                }
+            }
+
+            // 白いセルの一致数をカウント
+            foreach (var cell in Field.white_cell_coordinates)
+            {
+                if ( !this.my_field[cell.Item1, cell.Item2] )
+                {
+                    match_count++;
                 }
             }
             return match_count;
         }
 
         /// <summary>
-        /// お手本の黒い箇所の座標を格納するリスト
+        /// stampを平行移動したのち、myfieldに押す。
         /// </summary>
-        /// <returns></returns>
-        public List<Tuple<int, int>> GetBlackCellCoordinateForTargetField()
+        /// <param name="stamp">スタンプのオブジェクト</param>
+        /// <param name="parallel_translation_x">x軸方向への平行移動距離</param>
+        /// <param name="parallel_translation_y">y軸方向への平行移動距離</param>
+        public void PressStamp(Stamp stamp,
+                               short parallel_translation_x,
+                               short parallel_translation_y)
         {
-            if (black_cell_list_of_target_field.Count() == 0)
+            foreach (var cell in stamp.GetBlackCellCoordinate())
             {
-                return Field.black_cell_list_of_target_field;
-            }
-            else
-            {
-                for (int y = 0; y < Field.field_y_size; y++)
-                {
-                    for (int x = 0; x < Field.field_x_size; x++)
-                    {
-                        if (Field.target_field[y, x] == 1)
-                        {
-                            Field.black_cell_list_of_target_field.Add(new Tuple<int, int>(y, x));
-                        }
-                    }
-                }
+                short y = (short)(parallel_translation_y + cell.Item1);
+                short x = (short)(parallel_translation_x + cell.Item2);
 
-            }
-            return Field.black_cell_list_of_target_field;
-        }
-
-
-        /// <summary>
-        /// my_fieldにスタンプを押す。
-        /// </summary>
-        /// <param name=""></param>
-        public void PressStamp(Stamp stamp_object, int parallel_translation_x, int parallel_translation_y)
-        {
-            int candidate_press_x = 0;
-            int candidate_press_y = 0;
-
-            List<Tuple<int, int>> press_black_cell_coordinate_list = stamp_object.GetBlackCellCoordinate();
-
-            foreach (Tuple<int, int> press_tuple in press_black_cell_coordinate_list)
-            {
-                candidate_press_x = press_tuple.Item2 + parallel_translation_x;
-                candidate_press_y = press_tuple.Item1 + parallel_translation_y;
-
-                if (candidate_press_x < 0 ||
-                    candidate_press_y < 0 ||
-                    candidate_press_x >= Field.field_x_size ||
-                    candidate_press_y >= Field.field_y_size)
+                // スタンプを押す場所が my field の外なら continue
+                if (y < 0 || y >= Field.y_size || x < 0 || x >= Field.x_size)
                 {
                     continue;
                 }
 
-                if (this.my_field[candidate_press_y, candidate_press_x] == 0)
-                {
-                    this.my_field[candidate_press_y, candidate_press_x] = 1;
-                }
-                else if (this.my_field[candidate_press_y, candidate_press_x] == 1)
-                {
-                    this.my_field[candidate_press_y, candidate_press_x] = 0;
-                }
-                else
-                {
-                    Console.WriteLine("pass");
-                }
+                this.my_field[y, x] = !my_field[y, x];
             }
         }
     }

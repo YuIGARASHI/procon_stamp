@@ -18,13 +18,14 @@ namespace StampLib.model
             combined_stamp_object_list = new List<Stamp>();
         }
 
-        /// <summary>
-        /// 引数のStampクラスのオブジェクトをstamp_object_listにセットする。
-        /// </summary>
-        /// <param name="stamp_object">スタンプクラスのオブジェクト</param>
         public void SetOriginStampObject(List<Stamp> stamp_object)
         {
             this.origin_stamp_object_list = stamp_object;
+        }
+
+        public List<Stamp> GetCombinedStampObjectList()
+        {
+            return this.combined_stamp_object_list;
         }
 
         /// <summary>
@@ -35,11 +36,6 @@ namespace StampLib.model
             // ひとまずoriginal stamp listをそのまま使う
             // NOTE: deepcopyしていないが大丈夫か...？
             this.combined_stamp_object_list = this.origin_stamp_object_list;
-        }
-
-        public List<Stamp> GetCombinedStampObjectList()
-        {
-            return this.combined_stamp_object_list;
         }
     }
 }

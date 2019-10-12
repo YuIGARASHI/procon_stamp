@@ -9,6 +9,11 @@ namespace StampLib.algorithm
 {
     public class RandomSolver : Solver
     {
+        /// <summary>
+        /// ランダムにスタンプを配置し解を生成する。
+        /// </summary>
+        /// <param name="instance">インスタンスオブジェクト</param>
+        /// <returns>ソリューションオブジェクト</returns>
         override
         public Solution CalcSolution(Instance instance)
         {
@@ -16,18 +21,19 @@ namespace StampLib.algorithm
             Solution current_best_solution = new Solution();
 
             // 暫定解の目的関数値
-            int best_objective_value = 0;
+            short best_objective_value = 0;
 
             // 9.5秒以内で最適解を計算する
             var sw = new System.Diagnostics.Stopwatch();
             sw.Start();
 
-            while (sw.ElapsedMilliseconds < 9000)
+            while (sw.ElapsedMilliseconds < 9500)
             {
                 // ランダムなスタンプの配置を計算
                 Tuple<Solution, Field> result = RandomSolver.MakeCandidateSolution(instance);
                 Solution temp_solution = result.Item1;
                 Field temp_field = result.Item2;
+
                 // 目的関数値が改善すれば解に追加
                 if (temp_field.NumOfMatchesWithTargetField() > best_objective_value)
                 {
@@ -39,22 +45,26 @@ namespace StampLib.algorithm
             return current_best_solution;
         }
 
+        /// <summary>
+        /// スタンプを100回ランダムに押した解を生成する。
+        /// </summary>
+        /// <param name="instance">インスタンスオブジェクト</param>
+        /// <returns>生成した解, 解によって生成されたフィールド</returns>
         private static Tuple<Solution, Field> MakeCandidateSolution(Instance instance)
         {
-            int rand_seed = 1000;
+            short rand_seed = 1000;
             var rand = new Random(rand_seed);
             var temp_field = new Field();
             var temp_solution = new Solution();
 
-            int count = 0;
-            const int MAX_ITER = 100;
+            short count = 0;
+            const short MAX_ITER = 100;
             while (count < MAX_ITER)
             {
-                // TODO: メンバ変数を直接参照している。アクセサを経由するように改修すべき。
-                int parallel_translation_x = rand.Next(Field.field_x_size);
-                int parallel_translation_y = rand.Next(Field.field_y_size);
+                short parallel_translation_x = (short)rand.Next(Field.x_size);
+                short parallel_translation_y = (short)rand.Next(Field.y_size);
                 var combined_stamp_object_list = instance.GetCombinedStampObjectList();
-                int stamp_object_idx = rand.Next(combined_stamp_object_list.Count() - 1);
+                short stamp_object_idx = (short)rand.Next(combined_stamp_object_list.Count() - 1);
                 temp_solution.AddStampAnswer(combined_stamp_object_list[stamp_object_idx],
                                              parallel_translation_x,
                                              parallel_translation_y);
@@ -62,7 +72,6 @@ namespace StampLib.algorithm
                                       parallel_translation_x,
                                       parallel_translation_y);
                 count++;
-
             }
             return new Tuple<Solution, Field>(temp_solution, temp_field);
         }

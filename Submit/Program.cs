@@ -20,14 +20,12 @@ namespace Submit
             instance.SetOriginStampObject(io.GetStampObjectList());
             instance.MakeCombinedStampList();
 
-
             // ソルバーの生成 & 解の計算
             Solver solver = new RandomSolver();
             var solution = solver.CalcSolution(instance);
 
             // 解の出力
-            io.OutputSolution(solution, Field.field_x_size, Field.field_y_size);
-
+            io.OutputSolution(solution);
         }
     }
 }
