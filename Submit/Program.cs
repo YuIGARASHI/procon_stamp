@@ -15,7 +15,7 @@ namespace Submit
         {
             // 問題の読み取り
             var io = new IO();
-            io.InputProblem();
+            io.InputProblemFromConsole();
             var instance = new Instance();
             instance.SetOriginStampObject(io.GetStampObjectList());
             instance.MakeCombinedStampList();
@@ -25,7 +25,7 @@ namespace Submit
             var solution = solver.CalcSolution(instance);
 
             // 解の出力
-            io.OutputSolution(solution);
+            io.OutputSolutionToConsole(solution);
         }
     }
 }

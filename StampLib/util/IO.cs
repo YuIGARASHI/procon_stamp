@@ -25,7 +25,7 @@ namespace StampLib.util
         /// <summary>
         /// 標準入力から文字列を読み取り、お手本およびスタンプ一覧をセットする。
         /// </summary>
-        public void InputProblem()
+        public void InputProblemFromConsole()
         {
             // お手本の読み取り
             Field.SetTargetField(Console.ReadLine());
@@ -48,7 +48,7 @@ namespace StampLib.util
         /// 解の情報を受け取り標準出力に出力する
         /// </summary>
         /// <param name="solution"></param>
-        public void OutputSolution(Solution solution)
+        public void OutputSolutionToConsole(Solution solution)
         {
             var answer_list = new List<Tuple<short, short, short>>();
             foreach (var pressing_info in solution.GetStampAnswerList())
