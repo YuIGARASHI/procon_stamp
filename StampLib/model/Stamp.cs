@@ -9,8 +9,8 @@ namespace StampLib.model
     public class Stamp
     {
         // スタンプのx軸, y軸方向のサイズ
-        private short stamp_x_size;
-        private short stamp_y_size;
+        private short x_size;
+        private short y_size;
 
         // スタンプの黒いセルの座標を格納する配列。
         private List<Tuple<short, short>> black_cell_coordinates;
@@ -35,15 +35,15 @@ namespace StampLib.model
             this.origin_stamp_list.Add(new Tuple<short, short, short>(idx, 0, 0));
 
             string[] input_stamp_information = input_str.Split(';');
-            this.stamp_x_size = short.Parse(input_stamp_information[0]);
-            this.stamp_y_size = short.Parse(input_stamp_information[1]);
+            this.x_size = short.Parse(input_stamp_information[0]);
+            this.y_size = short.Parse(input_stamp_information[1]);
 
             // black_cell_coordinatesの計算
             string stamp_info_str = input_stamp_information[2];
             short current_position = 0;
-            for (short y = 0; y < stamp_y_size; y++)
+            for (short y = 0; y < y_size; y++)
             {
-                for (short x = 0; x < stamp_x_size; x++)
+                for (short x = 0; x < x_size; x++)
                 {
                     if (stamp_info_str[current_position] == '1')
                     {
@@ -62,6 +62,39 @@ namespace StampLib.model
         public List<Tuple<short, short, short>> GetOriginStampList()
         {
             return this.origin_stamp_list;
+        }
+
+        public short GetXSize()
+        {
+            return this.x_size;
+        }
+
+        public short GetYSize()
+        {
+            return this.y_size;
+        }
+
+        /// <summary>
+        /// スタンプを標準出力に描画する。
+        /// </summary>
+        public void Print()
+        {
+            for (short y_ind = 0; y_ind < this.y_size; ++y_ind)
+            {
+                for (short x_ind = 0; x_ind < this.x_size; ++x_ind)
+                {
+                    var candidate_cell = new Tuple<short, short>(y_ind, x_ind);
+                    if (this.black_cell_coordinates.Contains(candidate_cell))
+                    {
+                        Console.Write(" *");
+                    }
+                    else
+                    {
+                        Console.Write("  ");
+                    }
+                }
+                Console.WriteLine();
+            }
         }
     }
 }

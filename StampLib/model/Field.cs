@@ -121,5 +121,27 @@ namespace StampLib.model
                 this.my_field[y, x] = !my_field[y, x];
             }
         }
+
+        /// <summary>
+        /// 現在のフィールドを標準出力に描画する。
+        /// </summary>
+        public void Print()
+        {
+            for (short y_ind = 0; y_ind < Field.y_size; ++y_ind)
+            {
+                for (short x_ind = 0; x_ind < Field.x_size; ++x_ind)
+                {
+                    if (this.my_field[y_ind, x_ind])
+                    {
+                        Console.Write(" *");
+                    }
+                    else
+                    {
+                        Console.Write("  ");
+                    }
+                }
+                Console.WriteLine();
+            }
+        }
     }
 }
