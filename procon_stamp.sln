@@ -4,8 +4,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Submit", "Submit\Submit.csproj", "{8AC6EE6E-5BBE-4C06-995C-402FA8202DEF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A0D0E6E6-5F16-4FA0-B578-6DD837803542} = {A0D0E6E6-5F16-4FA0-B578-6DD837803542}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Experiment", "Experiment\Experiment.csproj", "{52D1FACB-764A-45E1-A3EA-72F9B9E5CA6D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A0D0E6E6-5F16-4FA0-B578-6DD837803542} = {A0D0E6E6-5F16-4FA0-B578-6DD837803542}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StampLib", "StampLib\StampLib.csproj", "{A0D0E6E6-5F16-4FA0-B578-6DD837803542}"
 EndProject

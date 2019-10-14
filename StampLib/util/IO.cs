@@ -9,26 +9,17 @@ namespace StampLib.util
 {
     public class IO
     {
-        // Stampクラスのオブジェクトを格納するリスト
-        private List<Stamp> stamp_object_list;
-
-        public IO()
-        {
-            this.stamp_object_list = new List<Stamp>();
-        }
-
-        public List<Stamp> GetStampObjectList()
-        {
-            return this.stamp_object_list;
-        }
-
         /// <summary>
         /// 標準入力から文字列を読み取り、お手本およびスタンプ一覧をセットする。
         /// </summary>
-        public void InputProblem()
+        public static Instance InputProblemFromConsole()
         {
-            // お手本の読み取り
-            Field.SetTargetField(Console.ReadLine());
+            Field field = new Field();
+            List<Stamp> stamp_list = new List<Stamp>();
+            Instance instance = new Instance();
+
+            // フィールドの読み取り
+            field.SetTargetField(Console.ReadLine());
 
             // スタンプオブジェクトの読み取り
             short count = 0;
@@ -39,16 +30,21 @@ namespace StampLib.util
                 {
                     break;
                 }
-                Stamp stamp_object = new Stamp(count++, buf_str);
-                stamp_object_list.Add(stamp_object);
+                Stamp tmp_stamp = new Stamp(count++, buf_str);
+                stamp_list.Add(tmp_stamp);
             }
+
+            instance.SetOriginStampObject(stamp_list);
+            instance.SetField(field);
+
+            return instance;
         }
 
         /// <summary>
         /// 解の情報を受け取り標準出力に出力する
         /// </summary>
         /// <param name="solution"></param>
-        public void OutputSolution(Solution solution)
+        public static void OutputSolutionToConsole(Solution solution)
         {
             var answer_list = new List<Tuple<short, short, short>>();
             foreach (var pressing_info in solution.GetStampAnswerList())
