@@ -11,11 +11,13 @@ namespace StampLib.model
 
         private List<Stamp> origin_stamp_object_list;
         private List<Stamp> combined_stamp_object_list;
+        private Field field;
 
         public Instance()
         {
-            origin_stamp_object_list = new List<Stamp>();
-            combined_stamp_object_list = new List<Stamp>();
+            this.origin_stamp_object_list = new List<Stamp>();
+            this.combined_stamp_object_list = new List<Stamp>();
+            this.field = new Field();
         }
 
         public void SetOriginStampObject(List<Stamp> stamp_object)
@@ -26,6 +28,11 @@ namespace StampLib.model
         public List<Stamp> GetCombinedStampObjectList()
         {
             return this.combined_stamp_object_list;
+        }
+
+        public void SetField( Field field )
+        {
+            this.field = field;
         }
 
         /// <summary>

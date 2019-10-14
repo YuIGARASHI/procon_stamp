@@ -13,10 +13,10 @@ namespace StampLib.model
         public static short y_size;
 
         // お手本の黒いセルの座標を格納するリスト
-        public static List<Tuple<short, short>> black_cell_coordinates;
+        private List<Tuple<short, short>> black_cell_coordinates;
 
         // お手本の白いセルの座標を格納するリスト
-        public static List<Tuple<short, short>> white_cell_coordinates;
+        private List<Tuple<short, short>> white_cell_coordinates;
 
         // 自分のフィールド情報を二次元配列で格納するリスト
         private bool[,] my_field;
@@ -25,13 +25,13 @@ namespace StampLib.model
         {
             Field.x_size = 0;
             Field.y_size = 0;
-            Field.black_cell_coordinates = new List<Tuple<short, short>>();
-            Field.white_cell_coordinates = new List<Tuple<short, short>>();
         }
 
         public Field()
         {
             this.my_field = new bool[Field.y_size, Field.x_size];
+            this.black_cell_coordinates = new List<Tuple<short, short>>();
+            this.white_cell_coordinates = new List<Tuple<short, short>>();
 
             for (short y = 0; y < Field.y_size; y++)
             {
@@ -46,7 +46,7 @@ namespace StampLib.model
         /// クラス変数（target_field、x_size、y_size）をセットする。
         /// </summary>
         /// <param name="target_field_info">お手本の情報を表す文字列</param>
-        public static void SetTargetField(string target_field_info)
+        public void SetTargetField(string target_field_info)
         {
             string[] target_field_info_array = target_field_info.Split(';');
             Field.x_size = short.Parse(target_field_info_array[0]);
@@ -60,10 +60,10 @@ namespace StampLib.model
                 {
                     if ( black_cell_coordinates_str[ind++] == '1' )
                     {
-                        Field.black_cell_coordinates.Add(new Tuple<short, short>(y_ind, x_ind));
+                        this.black_cell_coordinates.Add(new Tuple<short, short>(y_ind, x_ind));
                     } else
                     {
-                        Field.white_cell_coordinates.Add(new Tuple<short, short>(y_ind, x_ind));
+                        this.white_cell_coordinates.Add(new Tuple<short, short>(y_ind, x_ind));
                     }
                 }
             }
@@ -78,7 +78,7 @@ namespace StampLib.model
             short match_count = 0;
 
             // 黒いセルの一致数をカウント
-            foreach (var cell in Field.black_cell_coordinates)
+            foreach (var cell in this.black_cell_coordinates)
             {
                 if ( this.my_field[cell.Item1, cell.Item2] )
                 {
@@ -87,7 +87,7 @@ namespace StampLib.model
             }
 
             // 白いセルの一致数をカウント
-            foreach (var cell in Field.white_cell_coordinates)
+            foreach (var cell in this.white_cell_coordinates)
             {
                 if ( !this.my_field[cell.Item1, cell.Item2] )
                 {

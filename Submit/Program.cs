@@ -14,10 +14,7 @@ namespace Submit
         static void Main(string[] args)
         {
             // 問題の読み取り
-            var io = new IO();
-            io.InputProblemFromConsole();
-            var instance = new Instance();
-            instance.SetOriginStampObject(io.GetStampObjectList());
+            Instance instance = IO.InputProblemFromConsole();
             instance.MakeCombinedStampList();
 
             // ソルバーの生成 & 解の計算
@@ -25,7 +22,7 @@ namespace Submit
             var solution = solver.CalcSolution(instance);
 
             // 解の出力
-            io.OutputSolutionToConsole(solution);
+            IO.OutputSolutionToConsole(solution);
         }
     }
 }
