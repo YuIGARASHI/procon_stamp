@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="algorithm\FieldDivider.cs" />
     <Compile Include="algorithm\RandomSolver.cs" />
     <Compile Include="algorithm\Solver.cs" />
     <Compile Include="model\Field.cs" />
