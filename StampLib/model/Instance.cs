@@ -30,9 +30,19 @@ namespace StampLib.model
             return this.combined_stamp_object_list;
         }
 
+        public List<Stamp> GetOriginalStampObjectList()
+        {
+            return this.origin_stamp_object_list;
+        }
+
         public void SetField( Field field )
         {
             this.field = field;
+        }
+
+        public Field GetField()
+        {
+            return this.field;
         }
 
         /// <summary>

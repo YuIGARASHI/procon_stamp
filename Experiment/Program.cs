@@ -14,7 +14,7 @@ namespace Experiment
         static void Main(string[] args)
         {
             var experiment = new ExperimentsIgarashi();
-            experiment.PrintSomeStamps();
+            experiment.PrintSomeInstances();
         }
     }
 
@@ -35,12 +35,28 @@ namespace Experiment
     class ExperimentsIgarashi
     {
         /// <summary>
-        /// いくつかのスタンプの形を確認する。
+        /// 指定したパス配下にある問題をすべて読みこみ、スタンプを出力する
         /// </summary>
-        public void PrintSomeStamps()
+        public void PrintSomeInstances()
         {
-            Stamp stamp_02_07_01 = new Stamp(0, Shape.question_2_07_01);
-            stamp_02_07_01.Print();
+            IO io = new IO();
+            List<Instance> instance_list = io.InputProblemFromFolderPath("..\\..\\data");
+            foreach ( Instance instance in instance_list )
+            {
+                Console.WriteLine(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Stamps");
+                short count = 0;
+                foreach ( Stamp stamp in instance.GetOriginalStampObjectList() )
+                {
+                    Console.WriteLine("\n>>>>>>>>>>>>>>>>>>>>>>>> Stamp" + (count++) + "\n");
+                    stamp.Print();
+
+                    // スタンプの数が多いと表示するのが大変なので、1つの問題につき最大5つまで
+                    if ( count > 5 )
+                    {
+                        break;
+                    }
+                }
+            }
         }
     }
 
