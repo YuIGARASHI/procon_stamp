@@ -61,11 +61,13 @@ namespace StampLib.util
                                                                      (short)(origin_stamp.Item2 + slide_x),
                                                                      (short)(origin_stamp.Item3 + slide_y));
                     // スタンプがフィールド外にある場合には解に追加しない
-                    // NOTE: ここでは第4象限にある場合のみをチェック。それ以外はチェックしていない
+                    // combined stamp を使わない方針になりそうなので、いったんここのチェックをはずす
+                    /*
                     if (after_stamp.Item2 > Field.x_size || after_stamp.Item3 > Field.y_size)
                     {
                         continue;
                     }
+                    */
                     answer_list.Add(after_stamp);
                 }
             }

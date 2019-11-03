@@ -9,8 +9,8 @@ namespace StampLib.model
     public class Field
     {
         // お手本のフィールドのx,y軸方向サイズ
-        public static short x_size;
-        public static short y_size;
+        private short x_size;
+        private short y_size;
 
         // お手本の黒いセルの座標を格納するリスト
         private List<Tuple<short, short>> black_cell_coordinates;
@@ -21,25 +21,10 @@ namespace StampLib.model
         // 自分のフィールド情報を二次元配列で格納するリスト
         private bool[,] my_field;
 
-        static Field()
-        {
-            Field.x_size = 0;
-            Field.y_size = 0;
-        }
-
         public Field()
         {
-            this.my_field = new bool[Field.y_size, Field.x_size];
             this.black_cell_coordinates = new List<Tuple<short, short>>();
             this.white_cell_coordinates = new List<Tuple<short, short>>();
-
-            for (short y = 0; y < Field.y_size; y++)
-            {
-                for (short x = 0; x < Field.x_size; x++)
-                {
-                    this.my_field[y, x] = false;
-                }
-            }
         }
 
         /// <summary>
@@ -49,14 +34,23 @@ namespace StampLib.model
         public void SetTargetField(string target_field_info)
         {
             string[] target_field_info_array = target_field_info.Split(';');
-            Field.x_size = short.Parse(target_field_info_array[0]);
-            Field.y_size = short.Parse(target_field_info_array[1]);
+            this.x_size = short.Parse(target_field_info_array[0]);
+            this.y_size = short.Parse(target_field_info_array[1]);
+
+            this.my_field = new bool[this.y_size, this.x_size];
+            for (short y = 0; y < this.y_size; y++)
+            {
+                for (short x = 0; x < this.x_size; x++)
+                {
+                    this.my_field[y, x] = false;
+                }
+            }
 
             string black_cell_coordinates_str = target_field_info_array[2];
             int ind = 0; //!NOTE: ここはintにしないとオーバーフローする
-            for (short y_ind = 0; y_ind < Field.y_size; ++y_ind )
+            for (short y_ind = 0; y_ind < this.y_size; ++y_ind )
             {
-                for (short x_ind = 0; x_ind < Field.x_size; ++x_ind )
+                for (short x_ind = 0; x_ind < this.x_size; ++x_ind )
                 {
                     if ( black_cell_coordinates_str[ind++] == '1' )
                     {
@@ -67,6 +61,26 @@ namespace StampLib.model
                     }
                 }
             }
+        }
+
+        public List<Tuple<short,short>> GetBlackCellCoordinates()
+        {
+            return this.black_cell_coordinates;
+        }
+
+        public List<Tuple<short,short>> GetWhiteCellCoordinates()
+        {
+            return this.white_cell_coordinates;
+        }
+
+        public short GetXSize()
+        {
+            return this.x_size;
+        }
+
+        public short GetYSize()
+        {
+            return this.y_size;
         }
 
         /// <summary>
@@ -113,11 +127,10 @@ namespace StampLib.model
                 short x = (short)(parallel_translation_x + cell.Item2);
 
                 // スタンプを押す場所が my field の外なら continue
-                if (y < 0 || y >= Field.y_size || x < 0 || x >= Field.x_size)
+                if (y < 0 || y >= this.y_size || x < 0 || x >= this.x_size)
                 {
                     continue;
                 }
-
                 this.my_field[y, x] = !my_field[y, x];
             }
         }
@@ -127,9 +140,9 @@ namespace StampLib.model
         /// </summary>
         public void PrintMyself()
         {
-            for (short y_ind = 0; y_ind < Field.y_size; ++y_ind)
+            for (short y_ind = 0; y_ind < this.y_size; ++y_ind)
             {
-                for (short x_ind = 0; x_ind < Field.x_size; ++x_ind)
+                for (short x_ind = 0; x_ind < this.x_size; ++x_ind)
                 {
                     if (this.my_field[y_ind, x_ind])
                     {
@@ -137,7 +150,7 @@ namespace StampLib.model
                     }
                     else
                     {
-                        Console.Write("  ");
+                        Console.Write(" -");
                     }
                 }
                 Console.WriteLine();
@@ -149,9 +162,9 @@ namespace StampLib.model
         /// </summary>
         public void PrintTargetField()
         {
-            for (short y_ind = 0; y_ind < Field.y_size; ++y_ind)
+            for (short y_ind = 0; y_ind < this.y_size; ++y_ind)
             {
-                for (short x_ind = 0; x_ind < Field.x_size; ++x_ind)
+                for (short x_ind = 0; x_ind < this.x_size; ++x_ind)
                 {
                     if (black_cell_coordinates.Contains(new Tuple<short,short>(y_ind, x_ind)))
                     {
@@ -159,7 +172,7 @@ namespace StampLib.model
                     }
                     else
                     {
-                        Console.Write("  ");
+                        Console.Write(" -");
                     }
                 }
                 Console.WriteLine();

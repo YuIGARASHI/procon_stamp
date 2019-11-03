@@ -90,7 +90,7 @@ namespace StampLib.model
                     }
                     else
                     {
-                        Console.Write("  ");
+                        Console.Write(" -");
                     }
                 }
                 Console.WriteLine();

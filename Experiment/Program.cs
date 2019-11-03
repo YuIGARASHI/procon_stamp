@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 using StampLib.algorithm;
 using StampLib.model;
 using StampLib.util;
-using Google.OrTools.LinearSolver;
+// using Google.OrTools.LinearSolver;
+using Google.OrTools.Sat;
 
 namespace Experiment
 {
@@ -15,7 +16,7 @@ namespace Experiment
         static void Main(string[] args)
         {
             var experiment = new ExperimentsIgarashi();
-            experiment.OrToolsSimpleLpProgram();
+            experiment.SolvSmallProblemByOrTools();
         }
     }
 
@@ -66,6 +67,7 @@ namespace Experiment
         /// </summary>
         public void OrToolsSimpleLpProgram()
         {
+            /*
             // Create the linear solver with the GLOP backend.
             Solver solver = Solver.CreateSolver("SimpleLpProgram", "GLOP_LINEAR_PROGRAMMING");
 
@@ -76,7 +78,7 @@ namespace Experiment
             Console.WriteLine("Number of variables = " + solver.NumVariables());
 
             // Create a linear constraint, 0 <= x + y <= 2.
-            Constraint ct = solver.MakeConstraint(0.0, 2.0, "ct");
+            Google.OrTools.LinearSolver.Constraint ct = solver.MakeConstraint(0.0, 2.0, "ct");
             ct.SetCoefficient(x, 1);
             ct.SetCoefficient(y, 1);
 
@@ -94,6 +96,146 @@ namespace Experiment
             Console.WriteLine("Objective value = " + solver.Objective().Value());
             Console.WriteLine("x = " + x.SolutionValue());
             Console.WriteLine("y = " + y.SolutionValue());
+            */
+        }
+
+        public void SimpleSatProgram()
+        {
+            // Creates the model.
+            CpModel model = new CpModel();
+
+            // Creates the variables.
+            int num_vals = 3;
+
+            IntVar x = model.NewIntVar(0, num_vals - 1, "x");
+            IntVar y = model.NewIntVar(0, num_vals - 1, "y");
+            IntVar z = model.NewIntVar(0, num_vals - 1, "z");
+
+            // Creates the constraints.
+            model.Add(x != y);
+
+            // Creates a solver and solves the model.
+            CpSolver solver = new CpSolver();
+            CpSolverStatus status = solver.Solve(model);
+
+            if (status == CpSolverStatus.Feasible)
+            {
+                Console.WriteLine("x = " + solver.Value(x));
+                Console.WriteLine("y = " + solver.Value(y));
+                Console.WriteLine("z = " + solver.Value(z));
+            }
+        }
+
+        /// <summary>
+        /// or-toolsの検証
+        /// 小さいサイズの問題を解けるかどうか試しにやってみる
+        /// </summary>
+        public void SolvSmallProblemByOrTools()
+        {
+            // フィールドとスタンプの生成
+            int field_size = 7; // 今回の例では正方形なので縦横共通
+            string field_str = field_size.ToString() + ";" + field_size.ToString() + ";" +
+                               "0000000" +
+                               "0110110" + 
+                               "0110010" + 
+                               "0010111" + 
+                               "0000111" + 
+                               "1110010" +
+                               "0110110";
+            int stamp_size = 4;　// 今回の例では正方形なので縦横共通
+            string stamp_str = stamp_size.ToString() + ";" + stamp_size.ToString() + ";" +
+                               "0001"  +
+                               "0101"  + 
+                               "0110" +
+                               "1110";
+            Field field = new Field();
+            field.SetTargetField(field_str);
+            Stamp stamp = new Stamp(0, stamp_str);
+
+            // CpModelに変数を追加
+            CpModel model = new CpModel();
+            Dictionary<Tuple<int,int>,IntVar> stamp_variables = new Dictionary<Tuple<int, int>, IntVar>();
+            Dictionary<Tuple<int, int>, IntVar> field_variables = new Dictionary<Tuple<int, int>, IntVar>();
+            // スタンプ変数
+            for ( int y = (stamp_size - 1) * (-1); y < field_size; ++y)
+            {
+                for (int x = (stamp_size - 1) * (-1); x < field_size; ++x)
+                {
+                    string name = "stamp_" + y.ToString() + "_" + x.ToString();
+                    stamp_variables[new Tuple<int, int>(y, x)] = model.NewBoolVar(name);
+                }
+            }
+            // フィールド変数
+            for (int y = 0; y < field_size; ++y )
+            {
+                for (int x = 0; x < field_size; ++x)
+                {
+                    string name = "field" + y.ToString() + "_" + x.ToString();
+                    field_variables[new Tuple<int, int>(y, x)] = model.NewBoolVar(name);
+                }
+            }
+
+
+            List<Tuple<short, short>> field_black_cell_coordinates = field.GetBlackCellCoordinates();
+            foreach ( var field_cell in field_black_cell_coordinates )
+            { 
+                List<IntVar> var_take_xors = new List<IntVar>();
+                List<Tuple<short, short>> stamp_black_cell_coordinates = stamp.GetBlackCellCoordinate();
+                foreach ( var stamp_cell in stamp_black_cell_coordinates )
+                {
+                    int y_ind = field_cell.Item1 - stamp_cell.Item1;
+                    int x_ind = field_cell.Item2 - stamp_cell.Item2;
+                    var_take_xors.Add(stamp_variables[new Tuple<int, int>(y_ind, x_ind)]);
+                }
+                model.AddBoolXor(var_take_xors);
+            }
+
+            List<Tuple<short, short>> field_white_cell_coordinates = field.GetWhiteCellCoordinates();
+            foreach ( var field_cell in field_white_cell_coordinates )
+            {
+                List<IntVar> var_take_xors = new List<IntVar>();
+                List<Tuple<short, short>> stamp_black_cell_coordinates = stamp.GetBlackCellCoordinate();
+                foreach (var stamp_cell in stamp_black_cell_coordinates)
+                {
+                    int y_ind = field_cell.Item1 - stamp_cell.Item1;
+                    int x_ind = field_cell.Item2 - stamp_cell.Item2;
+                    var_take_xors.Add(stamp_variables[new Tuple<int, int>(y_ind, x_ind)]);
+
+                }
+                
+                // target fieldの情報を制約に追加.
+                List<IntVar> field_variable = new List<IntVar>();
+                field_variable.Add(field_variables[new Tuple<int, int>(field_cell.Item1, field_cell.Item2)]);
+                model.AddBoolAnd(field_variable);
+
+                var_take_xors.Add(field_variables[new Tuple<int, int>(field_cell.Item1, field_cell.Item2)]);
+                model.AddBoolXor(var_take_xors);
+            }
+
+            // 求解
+            CpSolver solver = new CpSolver();
+            CpSolverStatus status = solver.Solve(model);
+
+            // 解の検証
+            if (status == CpSolverStatus.Feasible)
+            {
+                for (int y = (stamp_size - 1) * (-1); y < field_size; ++y)
+                {
+                    for (int x = (stamp_size - 1) * (-1); x < field_size; ++x)
+                    {
+                        Tuple<int, int> cur_pos = new Tuple<int, int>(y, x);
+                        if (solver.Value(stamp_variables[cur_pos]) == 1)
+                        {
+                            field.PressStamp(stamp, (short)x, (short)y);
+                        }
+                    }
+                }
+
+                Console.WriteLine("my_field is :");
+                field.PrintMyself();
+                Console.WriteLine("\ntarget_field is :");
+                field.PrintTargetField();
+            }
         }
     }
 
