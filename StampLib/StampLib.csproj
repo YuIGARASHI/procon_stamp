@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -42,8 +43,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="algorithm\FieldDivider.cs" />
-    <Compile Include="algorithm\RandomSolver.cs" />
-    <Compile Include="algorithm\Solver.cs" />
+    <Compile Include="algorithm\RandomStampSolver.cs" />
+    <Compile Include="algorithm\StampSolver.cs" />
     <Compile Include="model\Field.cs" />
     <Compile Include="model\Instance.cs" />
     <Compile Include="model\Solution.cs" />

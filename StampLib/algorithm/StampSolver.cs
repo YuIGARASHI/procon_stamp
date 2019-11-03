@@ -7,7 +7,7 @@ using StampLib.model;
 
 namespace StampLib.algorithm
 {
-    public abstract class Solver
+    public abstract class StampSolver
     {
         abstract public Solution CalcSolution(Instance instance);
     }

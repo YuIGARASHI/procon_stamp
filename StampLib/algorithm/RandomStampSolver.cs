@@ -7,7 +7,7 @@ using StampLib.model;
 
 namespace StampLib.algorithm
 {
-    public class RandomSolver : Solver
+    public class RandomStampSolver : StampSolver
     {
         /// <summary>
         /// ランダムにスタンプを配置し解を生成する。
@@ -30,7 +30,7 @@ namespace StampLib.algorithm
             while (sw.ElapsedMilliseconds < 9500)
             {
                 // ランダムなスタンプの配置を計算
-                Tuple<Solution, Field> result = RandomSolver.MakeCandidateSolution(instance);
+                Tuple<Solution, Field> result = RandomStampSolver.MakeCandidateSolution(instance);
                 Solution temp_solution = result.Item1;
                 Field temp_field = result.Item2;
 
