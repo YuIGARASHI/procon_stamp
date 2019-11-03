@@ -133,18 +133,11 @@ namespace Experiment
         public void SolvSmallProblemByOrTools()
         {
             // フィールドとスタンプの生成
-            int field_size = 7; // 今回の例では正方形なので縦横共通
-            string field_str = field_size.ToString() + ";" + field_size.ToString() + ";" +
-                               "0000000" +
-                               "0110110" + 
-                               "0110010" + 
-                               "0010111" + 
-                               "0000111" + 
-                               "1110010" +
-                               "0110110";
+            int field_size = 64; // 今回の例では正方形なので縦横共通
+            string field_str = Shape.star;
             int stamp_size = 4;　// 今回の例では正方形なので縦横共通
             string stamp_str = stamp_size.ToString() + ";" + stamp_size.ToString() + ";" +
-                               "0001"  +
+                               "1111"  +
                                "0101"  + 
                                "0110" +
                                "1110";
@@ -214,9 +207,11 @@ namespace Experiment
 
             // 求解
             CpSolver solver = new CpSolver();
+            Console.WriteLine("start!!\n");
             CpSolverStatus status = solver.Solve(model);
 
             // 解の検証
+            Console.WriteLine("Pressing stamp is:");
             if (status == CpSolverStatus.Feasible)
             {
                 for (int y = (stamp_size - 1) * (-1); y < field_size; ++y)
@@ -227,11 +222,17 @@ namespace Experiment
                         if (solver.Value(stamp_variables[cur_pos]) == 1)
                         {
                             field.PressStamp(stamp, (short)x, (short)y);
+                            Console.Write("1");
+                        }
+                        else
+                        {
+                            Console.Write("0");
                         }
                     }
+                    Console.WriteLine();
                 }
 
-                Console.WriteLine("my_field is :");
+                Console.WriteLine("\nmy_field is :");
                 field.PrintMyself();
                 Console.WriteLine("\ntarget_field is :");
                 field.PrintTargetField();
