@@ -18,7 +18,8 @@ namespace Submit
             instance.MakeCombinedStampList();
 
             // ソルバーの生成 & 解の計算
-            Solver solver = new RandomSolver();
+            // Solver solver = new RandomSolver();
+            Solver solver = new SingleBlackCellSolver();
             var solution = solver.CalcSolution(instance);
 
             // 解の出力

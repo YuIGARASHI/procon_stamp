@@ -23,6 +23,14 @@ namespace StampLib.model
         private List<Tuple<short, short, short>> origin_stamp_list;
 
         /// <summary>
+        /// 引数なしコンストラクタ
+        /// </summary>
+        public Stamp()
+        {
+
+        }
+        
+        /// <summary>
         /// 引数ありコンストラクタ
         /// </summary>
         /// <param name="idx">スタンプのインデックス</param>

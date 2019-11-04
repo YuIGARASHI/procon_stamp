@@ -44,5 +44,10 @@ namespace StampLib.model
             // NOTE: deepcopyしていないが大丈夫か...？
             this.combined_stamp_object_list = this.origin_stamp_object_list;
         }
+
+        public bool HasSingleBlackCellStamp()
+        {
+            return false;
+        }
     }
 }

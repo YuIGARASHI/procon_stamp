@@ -13,7 +13,7 @@ namespace StampLib.model
         public static short y_size;
 
         // お手本の黒いセルの座標を格納するリスト
-        private List<Tuple<short, short>> black_cell_coordinates;
+        public List<Tuple<short, short>> black_cell_coordinates;
 
         // お手本の白いセルの座標を格納するリスト
         private List<Tuple<short, short>> white_cell_coordinates;
@@ -40,6 +40,11 @@ namespace StampLib.model
                     this.my_field[y, x] = false;
                 }
             }
+        }
+
+        public List<Tuple<short, short>> GetBlackCellCoordinates()
+        {
+            return this.black_cell_coordinates;
         }
 
         /// <summary>

@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="algorithm\FieldDivider.cs" />
     <Compile Include="algorithm\RandomSolver.cs" />
+    <Compile Include="algorithm\SingleBlackCellSolver.cs" />
     <Compile Include="algorithm\Solver.cs" />
     <Compile Include="model\Field.cs" />
     <Compile Include="model\Instance.cs" />
