@@ -61,8 +61,8 @@ namespace StampLib.algorithm
             const short MAX_ITER = 100;
             while (count < MAX_ITER)
             {
-                short parallel_translation_x = (short)rand.Next(Field.x_size);
-                short parallel_translation_y = (short)rand.Next(Field.y_size);
+                short parallel_translation_x = (short)rand.Next(instance.GetField().GetXSize());
+                short parallel_translation_y = (short)rand.Next(instance.GetField().GetYSize());
                 var combined_stamp_object_list = instance.GetCombinedStampObjectList();
                 short stamp_object_idx = (short)rand.Next(combined_stamp_object_list.Count() - 1);
                 temp_solution.AddStampAnswer(combined_stamp_object_list[stamp_object_idx],
