@@ -27,13 +27,16 @@ namespace StampLib.algorithm
             var sw = new System.Diagnostics.Stopwatch();
             sw.Start();
 
+            short rand_seed = 1000;
+            var rand = new Random(rand_seed);
+
             while (sw.ElapsedMilliseconds < 9500)
             {
                 // ランダムなスタンプの配置を計算
-                Tuple<Solution, Field> result = RandomStampSolver.MakeCandidateSolution(instance);
+                Tuple<Solution, Field> result = RandomStampSolver.MakeCandidateSolution(instance, rand);
                 Solution temp_solution = result.Item1;
                 Field temp_field = result.Item2;
-
+                
                 // 目的関数値が改善すれば解に追加
                 if (temp_field.NumOfMatchesWithTargetField() > best_objective_value)
                 {
@@ -50,11 +53,9 @@ namespace StampLib.algorithm
         /// </summary>
         /// <param name="instance">インスタンスオブジェクト</param>
         /// <returns>生成した解, 解によって生成されたフィールド</returns>
-        private static Tuple<Solution, Field> MakeCandidateSolution(Instance instance)
+        private static Tuple<Solution, Field> MakeCandidateSolution(Instance instance, Random rand)
         {
-            short rand_seed = 1000;
-            var rand = new Random(rand_seed);
-            var temp_field = new Field();
+            var temp_field = new Field(instance.GetField());
             var temp_solution = new Solution();
 
             short count = 0;

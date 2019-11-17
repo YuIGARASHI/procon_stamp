@@ -28,6 +28,30 @@ namespace StampLib.model
         }
 
         /// <summary>
+        /// コピーコンストラクタ
+        /// </summary>
+        /// <param name="field">コピー元のフィールド</param>
+        public Field(Field field)
+        {
+            this.x_size = field.x_size;
+            this.y_size = field.y_size;
+            
+            // リストをDeepCopy
+            this.black_cell_coordinates = new List<Tuple<short, short>>(field.GetBlackCellCoordinates());
+            this.white_cell_coordinates = new List<Tuple<short, short>>(field.GetWhiteCellCoordinates());
+
+            // my_fieldは通常通り初期化
+            this.my_field = new bool[this.y_size, this.x_size];
+            for (short y = 0; y < this.y_size; y++)
+            {
+                for (short x = 0; x < this.x_size; x++)
+                {
+                    this.my_field[y, x] = false;
+                }
+            }
+        }
+
+        /// <summary>
         /// クラス変数（target_field、x_size、y_size）をセットする。
         /// </summary>
         /// <param name="target_field_info">お手本の情報を表す文字列</param>
