@@ -48,28 +48,13 @@ namespace StampLib.util
         public static void OutputSolutionToConsole(Solution solution)
         {
             var answer_list = new List<Tuple<short, short, short>>();
-            foreach (var pressing_info in solution.GetStampAnswerList())
+            var stamp_answer_list = solution.GetStampAnswerList();
+            foreach (var stamp_answer in stamp_answer_list)
             {
-                Stamp combined_stamp = pressing_info.Item1;
-                short slide_x = pressing_info.Item2;
-                short slide_y = pressing_info.Item3;
-
-                // スタンプを構成するorigin stampを平行移動したのちanswer_listに追加
-                foreach (var origin_stamp in combined_stamp.GetOriginStampList())
-                {
-                    var after_stamp = new Tuple<short, short, short>(origin_stamp.Item1,
-                                                                     (short)(origin_stamp.Item2 + slide_x),
-                                                                     (short)(origin_stamp.Item3 + slide_y));
-                    // スタンプがフィールド外にある場合には解に追加しない
-                    // combined stamp を使わない方針になりそうなので、いったんここのチェックをはずす
-                    /*
-                    if (after_stamp.Item2 > Field.x_size || after_stamp.Item3 > Field.y_size)
-                    {
-                        continue;
-                    }
-                    */
-                    answer_list.Add(after_stamp);
-                }
+                Stamp stamp = stamp_answer.Item1;
+                short slide_x = stamp_answer.Item2;
+                short slide_y = stamp_answer.Item3;
+                answer_list.Add(new Tuple<short, short, short>(stamp.GetOriginStampIndex(), slide_x, slide_y));
             }
 
             // スタンプを押す回数を出力
