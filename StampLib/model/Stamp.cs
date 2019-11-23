@@ -105,5 +105,14 @@ namespace StampLib.model
                 Console.WriteLine();
             }
         }
+
+        /// <summary>
+        /// 自身がオリジナルスタンプの場合にtrueを返す
+        /// </summary>
+        /// <returns>自身がオリジナルスタンプか否か</returns>
+        public bool IsOriginalStamp()
+        {
+            return this.origin_stamp_index != -1;
+        }
     }
 }

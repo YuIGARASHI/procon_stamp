@@ -54,7 +54,7 @@ namespace StampLib.model
             foreach(var origin_stamp in this.origin_stamp_object_list)
             {
                 CombinedStamp cs = new CombinedStamp();
-                cs.AddOriginalStamp(this, origin_stamp.GetOriginStampIndex(), 0, 0);
+                cs.AddStamp(this, origin_stamp, 0, 0);
                 this.combined_stamp_object_list.Add(cs);
             }
         }
