@@ -9,34 +9,43 @@ namespace StampLib.model
     public class Stamp
     {
         // スタンプのx軸, y軸方向のサイズ
-        private short x_size;
-        private short y_size;
+        protected short x_size;
+        protected short y_size;
 
         // スタンプの黒いセルの座標を格納する配列。
-        private List<Tuple<short, short>> black_cell_coordinates;
+        protected List<Tuple<short, short>> black_cell_coordinates;
 
-        // スタンプを構成するオリジナルスタンプの情報を保持する3-tupeの配列。
-        // 3-tupleのレイアウトは(index, x軸方向への平行移動距離, y軸方向の平行移動距離)。
-        private List<Tuple<short, short, short>> indices;
-
-        // スタンプのオブジェクトを格納するリスト
-        private List<Tuple<short, short, short>> origin_stamp_list;
+        // 入力問題中の自身のインデクス。combined_stampの場合は-1(無効値)になる
+        // NOTE:本来であればこの変数はStampクラスに入っているべきではない。
+        //      CombinedStampはStampを継承しているにもかかわらず、この変数の存在により is-a 関係が崩れてしまっているため。
+        //      時間の関係で今回はこのようなクラス構成になってしまっているが、べき論でいえば
+        //      Stampを継承するOriginalStampクラスをつくってそこにこの変数をもたせるのがよさそう。
+        private short origin_stamp_index;
 
         /// <summary>
-        /// 引数ありコンストラクタ
+        /// 引数なしコンストラクタ。CombinedStampを生成する際にのみ用いる。
+        /// </summary>
+        public Stamp()
+        {
+            this.black_cell_coordinates = new List<Tuple<short, short>>();
+            this.x_size = 0;
+            this.y_size = 0;
+            this.origin_stamp_index = -1;
+        }
+
+        /// <summary>
+        /// 引数ありコンストラクタ。OriginalStampを生成する際にのみ用いる。
         /// </summary>
         /// <param name="idx">スタンプのインデックス</param>
         /// <param name="input_str">スタンプの定義（x軸方向サイズ；y 軸方向サイズ；絵の定義）</param>
         public Stamp(short idx, string input_str)
         {
             this.black_cell_coordinates = new List<Tuple<short, short>>();
-            this.indices = new List<Tuple<short, short, short>>();
-            origin_stamp_list = new List<Tuple<short, short, short>>();
-            this.origin_stamp_list.Add(new Tuple<short, short, short>(idx, 0, 0));
 
             string[] input_stamp_information = input_str.Split(';');
             this.x_size = short.Parse(input_stamp_information[0]);
             this.y_size = short.Parse(input_stamp_information[1]);
+            this.origin_stamp_index = idx;
 
             // black_cell_coordinatesの計算
             string stamp_info_str = input_stamp_information[2];
@@ -59,11 +68,6 @@ namespace StampLib.model
             return this.black_cell_coordinates;
         }
 
-        public List<Tuple<short, short, short>> GetOriginStampList()
-        {
-            return this.origin_stamp_list;
-        }
-
         public short GetXSize()
         {
             return this.x_size;
@@ -72,6 +76,11 @@ namespace StampLib.model
         public short GetYSize()
         {
             return this.y_size;
+        }
+
+        public short GetOriginStampIndex()
+        {
+            return this.origin_stamp_index;
         }
 
         /// <summary>
