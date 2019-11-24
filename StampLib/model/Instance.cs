@@ -151,5 +151,22 @@ namespace StampLib.model
 
             return origin_solution;
         }
+
+        /// <summary>
+        /// 黒いセルが1つだけのスタンプを保持しているかどうかを返す
+        /// </summary>
+        /// <returns>保持している場合true</returns>
+        public bool HasSingleCellStamp()
+        {
+            foreach (var combined_stamp in this.combined_stamp_object_list)
+            {
+                if (combined_stamp.GetBlackCellCoordinate().Count() == 1)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }
