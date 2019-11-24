@@ -210,6 +210,7 @@ namespace Experiment
 
             // 求解
             CpSolver solver = new CpSolver();
+            solver.StringParameters = "max_time_in_seconds:5.0";
             Console.WriteLine("start!!\n");
             CpSolverStatus status = solver.Solve(model);
 
