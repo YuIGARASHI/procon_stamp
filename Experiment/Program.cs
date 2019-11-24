@@ -121,6 +121,7 @@ namespace Experiment
             CpSolver solver = new CpSolver();
             CpSolverStatus status = solver.Solve(model);
 
+ 
             if (status == CpSolverStatus.Feasible)
             {
                 Console.WriteLine("x = " + solver.Value(x));
