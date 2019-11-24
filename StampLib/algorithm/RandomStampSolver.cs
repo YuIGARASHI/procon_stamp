@@ -17,6 +17,7 @@ namespace StampLib.algorithm
         override
         public Solution CalcSolution(Instance instance)
         {
+
             // 暫定解
             Solution current_best_solution = new Solution();
 
