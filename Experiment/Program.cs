@@ -9,14 +9,17 @@ using StampLib.util;
 // using Google.OrTools.LinearSolver;
 using Google.OrTools.Sat;
 
+
 namespace Experiment
 {
     class Program
     {
         static void Main(string[] args)
         {
-            var experiment = new ExperimentsIgarashi();
-            experiment.SolvSmallProblemByOrTools();
+            var experiment_fiji = new ExperimentsFujimoto();
+            experiment_fiji.TestFieldDivider();
+            // var experiment = new ExperimentsIgarashi();
+            // experiment.SolvSmallProblemByOrTools();
         }
     }
 
@@ -242,6 +245,44 @@ namespace Experiment
 
     class ExperimentsFujimoto
     {
+        // 縦10,横20の長方長
+        public static string sample_field = "20;10;00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+
+        public void TestFieldDivider()
+        {
+            #region 【テスト】FieldDivider
+
+            Field temp_field = new Field();
+            temp_field.SetTargetField(sample_field);
+            List<Tuple<Tuple<short, short>, Tuple<short, short>>> temp_start_end_position;
+            // y軸、x軸両方割り切れるパターン
+            // →テストOK
+            //FieldDivider temp_fielddivider = new FieldDivider(2, 4);
+
+            // x軸だけ余りが発生するパターン
+            // →テストOK
+            //FieldDivider temp_fielddivider = new FieldDivider(2, 3);
+
+            // y軸だけ余りが発生するパターン
+            // →テストOK
+            //FieldDivider temp_fielddivider = new FieldDivider(3, 4);
+
+            // y軸、x軸両方余りが発生するパターン
+            // →テストOK
+            FieldDivider temp_fielddivider = new FieldDivider(3, 3, temp_field);
+
+            temp_fielddivider.CalcStartEndPosition(temp_field.GetYSize(), temp_field.GetXSize());
+            temp_start_end_position = temp_fielddivider.GetStartEndPosition();
+
+            Console.WriteLine("配列の長さ：" + temp_start_end_position.Count().ToString());
+            
+            foreach (Tuple<Tuple<short, short>, Tuple<short, short>> tuple in temp_start_end_position)
+            {
+                Console.WriteLine(tuple);
+            }
+
+            #endregion
+        }
 
     }
 }
