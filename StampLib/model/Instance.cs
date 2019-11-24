@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Google.OrTools.Sat;
 
 namespace StampLib.model
 {
@@ -50,12 +51,43 @@ namespace StampLib.model
         /// </summary>
         public void MakeCombinedStampList()
         {
-            // とりあえず仮実装
-            foreach(var origin_stamp in this.origin_stamp_object_list)
+
+            int max_count = 640 * 480;
+            CombinedStamp candidate_combined_stamp = new CombinedStamp();
+            
+            // combined_stamp_listに追加
+            foreach (var origin_stamp in this.origin_stamp_object_list)
             {
                 CombinedStamp cs = new CombinedStamp();
                 cs.AddStamp(this, origin_stamp, 0, 0);
+                cs.AddStamp(this, origin_stamp, 0, 1);
                 this.combined_stamp_object_list.Add(cs);
+            }
+
+
+            // combined_stamp_listの中から黒いセルが一番少ないスタンプを抽出する
+            foreach (var combined_stamp in this.combined_stamp_object_list)
+            {
+                if (max_count > combined_stamp.GetBlackCellCoordinate().Count())
+                {
+                    max_count = combined_stamp.GetBlackCellCoordinate().Count();
+                    candidate_combined_stamp = combined_stamp;
+                }
+            }
+
+            #region OrTools
+            // Creates the model.
+            CpModel model = new CpModel();
+
+
+
+            #endregion
+
+
+
+            foreach (var combined_stamp_object in this.combined_stamp_object_list)
+            {
+                combined_stamp_object.Print();
             }
         }
 
