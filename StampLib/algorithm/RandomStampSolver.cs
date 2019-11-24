@@ -22,7 +22,7 @@ namespace StampLib.algorithm
             Solution current_best_solution = new Solution();
 
             // 暫定解の目的関数値
-            short best_objective_value = 0;
+            int best_objective_value = 0;
 
             // 9.5秒以内で最適解を計算する
             var sw = new System.Diagnostics.Stopwatch();
