@@ -45,6 +45,7 @@
     <Compile Include="algorithm\FieldDivider.cs" />
     <Compile Include="algorithm\RandomStampSolver.cs" />
     <Compile Include="algorithm\StampSolver.cs" />
+    <Compile Include="model\CombinedStamp.cs" />
     <Compile Include="model\Field.cs" />
     <Compile Include="model\Instance.cs" />
     <Compile Include="model\Solution.cs" />
