@@ -91,8 +91,8 @@ namespace StampLib.model
                 black_cell_max_y = Math.Max(cell.Item1, black_cell_max_y);
                 black_cell_max_x = Math.Max(cell.Item2, black_cell_max_x);
             }
-            this.y_size = black_cell_max_y;
-            this.x_size = black_cell_max_x;
+            this.y_size = (short)(black_cell_max_y + 1);
+            this.x_size = (short)(black_cell_max_x + 1);
         }
     }
 }
