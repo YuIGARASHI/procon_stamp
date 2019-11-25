@@ -19,8 +19,18 @@ namespace Submit
             // original stampを基にしたcombined stampの生成
             instance.MakeCombinedStampList();
 
-            // ソルバーの生成 & 解の計算
-            StampSolver solver = new RandomStampSolver();
+            // ソルバーの生成
+            StampSolver solver = null;
+            if (instance.HasSingleCellStamp())
+            {
+                solver = new SingleCellSolver();
+            }
+            else
+            {
+                solver = new RandomStampSolver();
+            }
+
+            // 求解
             var combined_solution = solver.CalcSolution(instance);
 
             // combined_solutionからoriginal solutionへの変換

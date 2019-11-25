@@ -111,9 +111,9 @@ namespace StampLib.model
         /// target_fieldとmy_fieldとの一致数を計算する。
         /// </summary>
         /// <returns>一致数</returns>
-        public short NumOfMatchesWithTargetField()
+        public int NumOfMatchesWithTargetField()
         {
-            short match_count = 0;
+            int match_count = 0;
 
             // 黒いセルの一致数をカウント
             foreach (var cell in this.black_cell_coordinates)
