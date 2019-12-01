@@ -83,12 +83,11 @@ namespace StampLib.model
 
             #endregion
 
-
-
             foreach (var combined_stamp_object in this.combined_stamp_object_list)
             {
                 combined_stamp_object.Print();
             }
+
         }
 
         /// <summary>
