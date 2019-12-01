@@ -16,10 +16,10 @@ namespace Experiment
     {
         static void Main(string[] args)
         {
-            var experiment_fiji = new ExperimentsFujimoto();
-            experiment_fiji.TestFieldDivider();
-            // var experiment = new ExperimentsIgarashi();
-            // experiment.SolvSmallProblemByOrTools();
+            //var experiment_fiji = new ExperimentsFujimoto();
+            //experiment_fiji.TestFieldDivider();
+            var experiment = new ExperimentsIgarashi();
+            experiment.SolvSmallProblemByOrTools();
         }
     }
 
