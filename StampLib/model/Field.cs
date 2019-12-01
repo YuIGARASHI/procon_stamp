@@ -92,9 +92,19 @@ namespace StampLib.model
             return this.black_cell_coordinates;
         }
 
+        public void AddBlackCellCoordinates(short y_ind, short x_ind)
+        {
+            this.black_cell_coordinates.Add(new Tuple<short, short>(y_ind, x_ind));
+        }
+
         public List<Tuple<short,short>> GetWhiteCellCoordinates()
         {
             return this.white_cell_coordinates;
+        }
+
+        public void AddWhiteCellCoordinates(short y_ind, short x_ind)
+        {
+            this.white_cell_coordinates.Add(new Tuple<short, short>(y_ind, x_ind));
         }
 
         public short GetXSize()
@@ -105,6 +115,16 @@ namespace StampLib.model
         public short GetYSize()
         {
             return this.y_size;
+        }
+
+        public void SetXSize(short  x_sixe)
+        {
+            this.x_size = x_sixe;
+        }
+
+        public void SetYSize(short y_size)
+        {
+            this.y_size = y_size;
         }
 
         /// <summary>
@@ -200,6 +220,18 @@ namespace StampLib.model
                     }
                 }
                 Console.WriteLine();
+            }
+        }
+
+        public void InitMyField()
+        {
+            this.my_field = new bool[this.y_size, this.x_size];
+            for (short y = 0; y < this.y_size; y++)
+            {
+                for (short x = 0; x < this.x_size; x++)
+                {
+                    this.my_field[y, x] = false;
+                }
             }
         }
     }

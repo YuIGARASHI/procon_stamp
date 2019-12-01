@@ -76,19 +76,137 @@ namespace StampLib.model
             }
 
             #region OrTools
+            Field single_cell_field = new Field();
+            short parameter_field_size = 80;
+            short M = parameter_field_size;
+            short N = parameter_field_size;
+            // ここで、single_cell_fieldの各種メンバ変数を初期化
+            single_cell_field.SetYSize(M);
+            single_cell_field.SetXSize(N);
+            for (short y = 0; y < M; y++)
+            {
+                for (short x = 0; x < N; x++)
+                {
+                    if ((y == (short)(M/2)) && (x == (short)(N/2)))
+                    {
+                        single_cell_field.AddBlackCellCoordinates(y, x);
+                    }
+                    else
+                    {
+                        single_cell_field.AddWhiteCellCoordinates(y, x);
+                    }
+                }
+            }
+
             // Creates the model.
             CpModel model = new CpModel();
+            Dictionary<Tuple<int, int>, IntVar> stamp_variables = new Dictionary<Tuple<int, int>, IntVar>();
+            Dictionary<Tuple<int, int>, IntVar> field_variables = new Dictionary<Tuple<int, int>, IntVar>();
+            // スタンプ変数
+            for (int y = (candidate_combined_stamp.GetYSize() - 1) * (-1); y < single_cell_field.GetYSize(); ++y)
+            {
+                for (int x = (candidate_combined_stamp.GetXSize() - 1) * (-1); x < single_cell_field.GetXSize(); ++x)
+                {
+                    string name = "stamp_" + y.ToString() + "_" + x.ToString();
+                    stamp_variables[new Tuple<int, int>(y, x)] = model.NewBoolVar(name);
+                }
+            }
+            // フィールド変数
+            for (int y = 0; y < single_cell_field.GetYSize(); ++y)
+            {
+                for (int x = 0; x < single_cell_field.GetXSize(); ++x)
+                {
+                    string name = "field" + y.ToString() + "_" + x.ToString();
+                    field_variables[new Tuple<int, int>(y, x)] = model.NewBoolVar(name);
+                }
+            }
 
 
+            List<Tuple<short, short>> field_black_cell_coordinates = single_cell_field.GetBlackCellCoordinates();
+            foreach (var field_cell in field_black_cell_coordinates)
+            {
+                List<IntVar> var_take_xors = new List<IntVar>();
+                List<Tuple<short, short>> stamp_black_cell_coordinates = candidate_combined_stamp.GetBlackCellCoordinate();
+                foreach (var stamp_cell in stamp_black_cell_coordinates)
+                {
+                    int y_ind = field_cell.Item1 - stamp_cell.Item1;
+                    int x_ind = field_cell.Item2 - stamp_cell.Item2;
+                    var_take_xors.Add(stamp_variables[new Tuple<int, int>(y_ind, x_ind)]);
+                }
+                model.AddBoolXor(var_take_xors);
+            }
+
+            List<Tuple<short, short>> field_white_cell_coordinates = single_cell_field.GetWhiteCellCoordinates();
+            foreach (var field_cell in field_white_cell_coordinates)
+            {
+                List<IntVar> var_take_xors = new List<IntVar>();
+                List<Tuple<short, short>> stamp_black_cell_coordinates = candidate_combined_stamp.GetBlackCellCoordinate();
+                foreach (var stamp_cell in stamp_black_cell_coordinates)
+                {
+                    int y_ind = field_cell.Item1 - stamp_cell.Item1;
+                    int x_ind = field_cell.Item2 - stamp_cell.Item2;
+                    var_take_xors.Add(stamp_variables[new Tuple<int, int>(y_ind, x_ind)]);
+
+                }
+
+                // target fieldの情報を制約に追加.
+                List<IntVar> field_variable = new List<IntVar>();
+                field_variable.Add(field_variables[new Tuple<int, int>(field_cell.Item1, field_cell.Item2)]);
+                model.AddBoolAnd(field_variable);
+
+                var_take_xors.Add(field_variables[new Tuple<int, int>(field_cell.Item1, field_cell.Item2)]);
+                model.AddBoolXor(var_take_xors);
+            }
+
+            // 求解
+            CpSolver solver = new CpSolver();
+            solver.StringParameters = "max_time_in_seconds:5.0";
+            //Console.WriteLine("start!!\n");
+            CpSolverStatus status = solver.Solve(model);
+
+            // --
+
+            // 解の検証
+            //Console.WriteLine("Pressing stamp is:");
+            Field dummy_field = new Field();
+            // ここで、single_cell_fieldの各種メンバ変数を初期化
+            dummy_field.SetYSize(M);
+            dummy_field.SetXSize(N);
+            dummy_field.InitMyField();
+
+            if (status == CpSolverStatus.Feasible)
+            {
+                for (int y = (candidate_combined_stamp.GetYSize() - 1) * (-1); y < dummy_field.GetYSize(); ++y)
+                {
+                    for (int x = (candidate_combined_stamp.GetXSize() - 1) * (-1); x < dummy_field.GetXSize(); ++x)
+                    {
+                        Tuple<int, int> cur_pos = new Tuple<int, int>(y, x);
+                        if (solver.Value(stamp_variables[cur_pos]) == 1)
+                        {
+          
+
+                            dummy_field.PressStamp(candidate_combined_stamp, (short)x, (short)y);
+                            Console.Write("1");
+                        }
+                        else
+                        {
+                            Console.Write("0");
+                        }
+                    }
+                    Console.WriteLine();
+                }
+
+                Console.WriteLine("\nmy_field is :");
+                dummy_field.PrintMyself();
+                Console.WriteLine("\ntarget_field is :");
+                single_cell_field.PrintTargetField();
+            }
 
             #endregion
-
-
-
-            foreach (var combined_stamp_object in this.combined_stamp_object_list)
-            {
-                combined_stamp_object.Print();
-            }
+            //foreach (var combined_stamp_object in this.combined_stamp_object_list)
+            //{
+            //    combined_stamp_object.Print();
+            //}
         }
 
         /// <summary>
