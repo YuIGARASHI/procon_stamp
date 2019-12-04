@@ -79,7 +79,7 @@
     </Reference>
     <Reference Include="StampLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\StampLib\bin\Release\StampLib.dll</HintPath>
+      <HintPath>..\StampLib\bin\x64\Release\StampLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
