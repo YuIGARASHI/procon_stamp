@@ -21,14 +21,33 @@ namespace Submit
 
             // ソルバーの生成
             StampSolver solver = null;
-            if (instance.HasSingleCellStamp())
+
+            //solver = new SmallInstanceSolver();
+
+            switch (instance.SelectAlgorithm())
             {
-                solver = new SingleCellSolver();
+                case 0:
+                    solver = new SmallInstanceSolver();
+                    break;
+                case 100:
+                    solver = new RandomStampSolver();
+                    break;
+                default:
+                    solver = new RandomStampSolver();
+                    break;
             }
-            else
-            {
-                solver = new RandomStampSolver();
-            }
+
+            //solver = new SmallInstanceSolver();
+            ///*
+            //if (instance.HasSingleCellStamp())
+            //{
+            //    solver = new SingleCellSolver();
+            //}
+            //else
+            //{
+            //    solver = new RandomStampSolver();
+            //}
+            //*/
 
             // 求解
             var combined_solution = solver.CalcSolution(instance);
