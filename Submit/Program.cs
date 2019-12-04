@@ -16,44 +16,11 @@ namespace Submit
             // 問題の読み取り
             Instance instance = IO.InputProblemFromConsole();
 
-            // original stampを基にしたcombined stampの生成
-            instance.MakeCombinedStampList();
-
             // ソルバーの生成
-            StampSolver solver = null;
-
-            //solver = new SmallInstanceSolver();
-
-            switch (instance.SelectAlgorithm())
-            {
-                case 0:
-                    solver = new SmallInstanceSolver();
-                    break;
-                case 100:
-                    solver = new RandomStampSolver();
-                    break;
-                default:
-                    solver = new RandomStampSolver();
-                    break;
-            }
-
-            //solver = new SmallInstanceSolver();
-            ///*
-            //if (instance.HasSingleCellStamp())
-            //{
-            //    solver = new SingleCellSolver();
-            //}
-            //else
-            //{
-            //    solver = new RandomStampSolver();
-            //}
-            //*/
+            StampSolver solver = new SimpleTilingSolver();
 
             // 求解
-            var combined_solution = solver.CalcSolution(instance);
-
-            // combined_solutionからoriginal solutionへの変換
-            var solution = instance.CombinedSolutionToOriginalSolution(combined_solution);
+            var solution = solver.CalcSolution(instance);
 
             // 解の出力
             IO.OutputSolutionToConsole(solution);

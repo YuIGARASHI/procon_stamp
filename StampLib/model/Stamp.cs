@@ -22,6 +22,13 @@ namespace StampLib.model
         //      Stampを継承するOriginalStampクラスをつくってそこにこの変数をもたせるのがよさそう。
         private short origin_stamp_index;
 
+        // 最も最初に読み込む黒いセルの座標
+        // 例:0000100
+        //    0011100
+        //    1110000
+        // の場合、最初に読み込む黒いセルは(y,x)=(0,4)なのでこの値が入る
+        private Tuple<short, short> first_black_cell_coordinate;
+
         /// <summary>
         /// 引数なしコンストラクタ。CombinedStampを生成する際にのみ用いる。
         /// </summary>
@@ -50,6 +57,7 @@ namespace StampLib.model
             // black_cell_coordinatesの計算
             string stamp_info_str = input_stamp_information[2];
             short current_position = 0;
+            bool first_black_cell_flag = true;
             for (short y = 0; y < y_size; y++)
             {
                 for (short x = 0; x < x_size; x++)
@@ -57,6 +65,11 @@ namespace StampLib.model
                     if (stamp_info_str[current_position] == '1')
                     {
                         this.black_cell_coordinates.Add(new Tuple<short, short>(y, x));
+                        if ( first_black_cell_flag )
+                        {
+                            this.first_black_cell_coordinate = new Tuple<short, short>(y, x);
+                            first_black_cell_flag = false;
+                        }
                     }
                     current_position++;
                 }
@@ -113,6 +126,11 @@ namespace StampLib.model
         public bool IsOriginalStamp()
         {
             return this.origin_stamp_index != -1;
+        }
+
+        public Tuple<short, short> GetFirstBlackCellCoord()
+        {
+            return this.first_black_cell_coordinate;
         }
     }
 }

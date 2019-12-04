@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="algorithm\FieldDivider.cs" />
     <Compile Include="algorithm\RandomStampSolver.cs" />
+    <Compile Include="algorithm\SimpleTilingSolver.cs" />
     <Compile Include="algorithm\SingleCellSolver.cs" />
     <Compile Include="algorithm\SmallInstanceSolver.cs" />
     <Compile Include="algorithm\StampSolver.cs" />

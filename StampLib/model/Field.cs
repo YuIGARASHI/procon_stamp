@@ -234,5 +234,27 @@ namespace StampLib.model
                 }
             }
         }
+
+        // 自身のターゲットフィールドをそのままMyFieldにコピーする
+        public void SetTargetFieldToMyField()
+        {
+            foreach (var black_cell in this.black_cell_coordinates)
+            {
+                short y = black_cell.Item1;
+                short x = black_cell.Item2;
+                my_field[y, x] = true;
+            }
+        }
+
+        public void SetMyField(short y, short x, bool value)
+        {
+            this.my_field[y, x] = value;
+        }
+
+        public bool GetMyField(short y, short x)
+        {
+            return this.my_field[y, x];
+        }
+
     }
 }
