@@ -56,7 +56,7 @@ namespace StampLib.model
                 Stamp origin_stamp = origin_stamp_list[origin_stamp_config.Item1];
                 short origin_x = origin_stamp_config.Item2;
                 short origin_y = origin_stamp_config.Item3;
-                AddOriginalStamp(origin_stamp, (short)(origin_x + slide_x), (short)(origin_x + slide_y));
+                AddOriginalStamp(origin_stamp, (short)(origin_x + slide_x), (short)(origin_y + slide_y));
             }
         }
 
