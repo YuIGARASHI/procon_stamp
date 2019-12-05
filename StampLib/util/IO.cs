@@ -58,11 +58,12 @@ namespace StampLib.util
             }
 
             // スタンプを押す回数を出力
-            short len_answer_list = (short)answer_list.Count();
+            //! @note ここはintにしないとオーバーフローする
+            int len_answer_list = answer_list.Count();
             Console.WriteLine(len_answer_list);
 
             // スタンプの押し方を出力
-            for (short i = 0; i < len_answer_list; ++i)
+            for (int i = 0; i < len_answer_list; ++i)
             {
                 short stamp_number = answer_list[i].Item1;
                 short slide_x = answer_list[i].Item2;
